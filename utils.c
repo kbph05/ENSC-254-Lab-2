@@ -43,7 +43,7 @@ Instruction parse_instruction(uint32_t instruction_bits) {
   /* YOUR CODE HERE */
 
   // I-Type
-  case 0x10011: // 0x11 OR 0x1110011
+  case 0x13: // 0x11 OR 0x1110011
     iTypeInstructions(instruction, instruction_bits);
     /* // 0000 0001 0101 1010 0000 0100 1
     // instruction.itype.rd = instruction_bits;
@@ -63,17 +63,17 @@ Instruction parse_instruction(uint32_t instruction_bits) {
   break;
 
   // I-Type
-  case 0x11:
+  case 0x3:
     iTypeInstructions(instruction, instruction_bits);
   break;
 
   // I-Type
-  case 0x1110011:
+  case 0x73:
     iTypeInstructions(instruction, instruction_bits);
   break;
 
   // S-Type
-  case 0x100011:
+  case 0x23:
 
     // 0000 0001 0101 1010 0000 0100 1
     instruction.stype.imm5 = instruction_bits;
@@ -99,7 +99,7 @@ Instruction parse_instruction(uint32_t instruction_bits) {
 
 
   // SB-Type
-  case 0x1100011:
+  case 0x63:
 
     // 0000 0001 0101 1010 0000 0100 1
     instruction.sbtype.imm5 = instruction_bits;
@@ -123,7 +123,7 @@ Instruction parse_instruction(uint32_t instruction_bits) {
   break;
 
   // U-Type
-  case 0x110111:
+  case 0x37:
 
     //0000 0001 0101 1010 0000 0100 1
     instruction.utype.rd = instruction_bits;
@@ -135,7 +135,7 @@ Instruction parse_instruction(uint32_t instruction_bits) {
   break;
 
   // UJ-Type
-  case 0x110011:
+  case 0x6F:
 
     // 0000 0001 0101 1010 0000 0100 1
     instruction.ujtype.rd = instruction_bits;
