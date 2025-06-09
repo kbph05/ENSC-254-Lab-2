@@ -161,7 +161,7 @@ Instruction parse_instruction(uint32_t instruction_bits) {
  * or executing the instructions. */
 
 //// Helper Function which sets instructions for all the different opcodes of I-type instructions: ////
-void iTypeInstructions(Instruction instruction, uint32_t instruction_bits) {
+Instruction iTypeInstructions(Instruction instruction, uint32_t instruction_bits) {
 
     // 0000 0001 0101 1010 0000 0100 1
     instruction.itype.rd = instruction_bits;
@@ -178,12 +178,16 @@ void iTypeInstructions(Instruction instruction, uint32_t instruction_bits) {
     // 0000 0001 0101
     instruction.itype.imm = instruction_bits;
     instruction_bits >>= 12;
+  
+    return instruction;
 }
 
 /* Sign extends the given field to a 32-bit integer where field is
  * interpreted an n-bit integer. */
+//// Kirstin ////
 int sign_extend_number(unsigned int field, unsigned int n) {
   /* YOUR CODE HERE */
+
   return 0;
 }
 
