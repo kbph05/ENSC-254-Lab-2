@@ -50,16 +50,16 @@ void decode_instruction(uint32_t instruction_bits) {
             break;
     }
 }
-
+// Lex Leung // 
 void write_rtype(Instruction instruction) {
     /* YOUR CODE HERE */
     switch (instruction.rtype.funct3) {
         case 0x0:
             switch (instruction.rtype.funct7) {
                 case 0x0:
-		  print_rtype("add", instruction);
+		            print_rtype("add", instruction);
                     break;
-		    case 0x1:
+		        case 0x1:
                     print_rtype("mul", instruction);
                     break;
                 case 0x20:
@@ -70,8 +70,84 @@ void write_rtype(Instruction instruction) {
                 break;      
             }
             break;
-        /* YOUR CODE HERE */
-        /* call print_rtype */
+
+
+        case 0x4:
+            switch(instruction.rtype.funct7) {
+                case 0x0:
+                    print_rtype("xor", instruction);
+                break;      
+                case 0x1:
+                    print_rtype("div", instruction);
+
+                break;
+            }
+            break;
+        case 0x6:
+            switch(instruction.rtype.funct7) {
+                case 0x0:
+                    print_rtype("or", instruction);
+                break;
+                case 0x1:
+                    print_rtype("rem", instruction);
+                break;
+            }
+            break;
+        case 0x7:
+            switch(instruction.rtype.funct7) {
+                case 0x0:
+                    print_rtype("and", instruction);
+                break;
+                case 0x1:
+                    print_rtype("remu", instruction);
+                break;
+            }
+            break;
+        case 0x1:
+            switch(instruction.rtype.funct7) {
+                case 0x0:
+                    print_rtype("sll", instruction);
+                break;
+                case 0x1:
+                    print_rtype("mulh", instruction);
+                break;
+            }
+        break;
+
+        case 0x5:
+            switch (instruction.rtype.funct7) {
+                case 0x0:
+                    print_rtype("srl", instruction);
+                break;
+                case 0x1:
+                    print_rtype("divu", instruction);
+                break;
+                case 0x2:
+                    print_rtype("sra", instruction);
+                break;
+            }
+        break;
+
+        case 0x2:
+            switch(instruction.rtype.funct7) {
+                case 0x0:
+                    print_rtype("slt", instruction);
+                break;
+
+                case 0x1:
+                    print_rtype("mulsu", instruction);
+                break;
+            
+            }
+        break;
+
+        case 0x3:
+            switch(instruction.rtype.funct7) {
+                case 0x0:
+                    print_rtype("sltu", instruction);
+                case 0x1:
+                    print_rtype("mulu", instruction);
+            }
         default:
             handle_invalid_instruction(instruction);
         break;
@@ -80,8 +156,8 @@ void write_rtype(Instruction instruction) {
 
 void write_itype_except_load(Instruction instruction) {
     switch (instruction.itype.funct3) {
-      /* YOUR CODE HERE */
-      /* call print_itype_except_load */
+        case 0x0:
+
         default:
             handle_invalid_instruction(instruction);
             break;  
@@ -124,7 +200,8 @@ void print_rtype(char *name, Instruction instruction) {
 }
 
 void print_itype_except_load(char *name, Instruction instruction, int imm) {
-    /* YOUR CODE HERE */
+    printf(ITYPE_FORMAT, name, instruction.itype.rd, instruction.itype.rs1,
+        instruction.itype.imm);
 }
 
 void print_load(char *name, Instruction instruction) {
