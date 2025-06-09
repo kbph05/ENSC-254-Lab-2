@@ -8,7 +8,8 @@
 //// Kirstin ////
 Instruction parse_instruction(uint32_t instruction_bits) {
   /* YOUR CODE HERE */
-  //// Helper Function which sets instructions for all the different opcodes of I-type instructions: ////
+
+  //// Helper Function which sets instructions for all the different opcodes of I-type instructions (why does it not work) ////
   Instruction iTypeInstructions(Instruction instruction, uint32_t instruction_bits) {
 
     // 0000 0001 0101 1010 0000 0100 1
@@ -207,14 +208,20 @@ Instruction parse_instruction(uint32_t instruction_bits) {
 //// Kirstin ////
 int sign_extend_number(unsigned int field, unsigned int n) {
   /* YOUR CODE HERE */
+  unsigned int extendedNumber : 32;
+  field >>= n;
+  extendedNumber = field;
+  // field: 1 0101 1010 0000 0100 1011 0011
+  // want: 0000 0001 0101 1010 0000 0100 1011 0011
 
-  return 0;
+  return extendedNumber;
 }
 
 /* Return the number of bytes (from the current PC) to the branch label using
  * the given branch instruction */
 int get_branch_offset(Instruction instruction) {
   /* YOUR CODE HERE */
+
   return 0;
 }
 
