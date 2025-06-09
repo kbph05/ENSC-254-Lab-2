@@ -60,5 +60,6 @@
     "*.uml": "plantuml",
     "stdlib.h": "c",
     "stdio.h": "c"
-  }
+  },
+  "cmake.sourceDirectory": "/net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code"
 }

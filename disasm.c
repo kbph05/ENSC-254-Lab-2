@@ -79,7 +79,9 @@ void write_rtype(Instruction instruction) {
                 break;      
                 case 0x1:
                     print_rtype("div", instruction);
-
+                break;
+                default:
+                    handle_invalid_instruction(instruction);
                 break;
             }
             break;
@@ -91,6 +93,9 @@ void write_rtype(Instruction instruction) {
                 case 0x1:
                     print_rtype("rem", instruction);
                 break;
+                default:
+                    handle_invalid_instruction(instruction);
+                break;
             }
             break;
         case 0x7:
@@ -101,6 +106,9 @@ void write_rtype(Instruction instruction) {
                 case 0x1:
                     print_rtype("remu", instruction);
                 break;
+                default:
+                    handle_invalid_instruction(instruction);
+                break;
             }
             break;
         case 0x1:
@@ -110,6 +118,9 @@ void write_rtype(Instruction instruction) {
                 break;
                 case 0x1:
                     print_rtype("mulh", instruction);
+                break;
+                default:
+                    handle_invalid_instruction(instruction);
                 break;
             }
         break;
@@ -122,8 +133,11 @@ void write_rtype(Instruction instruction) {
                 case 0x1:
                     print_rtype("divu", instruction);
                 break;
-                case 0x2:
+                case 0x20:
                     print_rtype("sra", instruction);
+                break;
+                default:
+                    handle_invalid_instruction(instruction);
                 break;
             }
         break;
@@ -137,6 +151,9 @@ void write_rtype(Instruction instruction) {
                 case 0x1:
                     print_rtype("mulsu", instruction);
                 break;
+                default:
+                    handle_invalid_instruction(instruction);
+                break;
             
             }
         break;
@@ -145,8 +162,13 @@ void write_rtype(Instruction instruction) {
             switch(instruction.rtype.funct7) {
                 case 0x0:
                     print_rtype("sltu", instruction);
+                break;
                 case 0x1:
                     print_rtype("mulu", instruction);
+                break;
+                default:
+                    handle_invalid_instruction(instruction);
+                break;
             }
         default:
             handle_invalid_instruction(instruction);
@@ -155,9 +177,57 @@ void write_rtype(Instruction instruction) {
 }
 
 void write_itype_except_load(Instruction instruction) {
+    uint32_t extracted_imm = (instruction.itype.imm >> 5) & ((1U << 7) - 1);
+    
     switch (instruction.itype.funct3) {
         case 0x0:
+            print_itype_except_load("addi", instruction, instruction.itype.imm);
+        break;
 
+
+        case 0x1:
+            switch (extracted_imm) {
+                case 0x0:
+                    print_itype_except_load("slli", instruction, instruction.itype.imm);
+                break;
+            default:
+                handle_invalid_instruction(instruction);
+                break;
+            }
+        break;
+
+
+        case 0x2:
+            print_itype_except_load("slti", instruction, instruction.itype.imm);
+            break;
+        
+        case 0x3:
+            print_itype_except_load("sltiu", instruction, instruction.itype.imm);
+            break;
+
+        case 0x4:
+            print_itype_except_load("xori", instruction, instruction.itype.imm);
+            break;
+
+        case 0x5:
+            switch (extracted_imm) {
+                case 0x00:
+                    print_itype_except_load("slli", instruction, instruction.itype.imm);
+                    break;
+                case 0x20:
+                    print_itype_except_load("srai", instruction, instruction.itype.imm);
+                    break;
+            default:
+                handle_invalid_instruction(instruction);
+                break;
+            }
+        case 0x6:
+            print_itype_except_load("ori", instruction, instruction.itype.imm);
+            break;
+        case 0x7:
+            print_itype_except_load("andi", instruction, instruction.itype.imm);
+            break;
+            
         default:
             handle_invalid_instruction(instruction);
             break;  
@@ -166,8 +236,21 @@ void write_itype_except_load(Instruction instruction) {
 
 void write_load(Instruction instruction) {
     switch (instruction.itype.funct3) {
-      /* YOUR CODE HERE */
-      /* call print_load */
+        case 0x0:
+            print_load("lb", instruction);
+            break;
+        case 0x1:
+            print_load("lh", instruction);
+            break;
+        case 0x2:
+            print_load("lw", instruction);
+            break;
+        case 0x4:
+            print_load("lbu", instruction);
+            break;
+        case 0x5:
+            print_load("lhu", instruction);
+            break;
         default:
             handle_invalid_instruction(instruction);
             break;
