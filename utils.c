@@ -26,7 +26,7 @@ Instruction parse_instruction(uint32_t instruction_bits) {
   
     return instruction;
   }
-  
+
   Instruction instruction;
   // add x9, x20, x21   hex: 01 5A 04 B3, binary = 0000 0001 0101 1010 0000 0100 1011 0011
   // Opcode: 0110011 (0x33) Get the Opcode by &ing 0x1111111, bottom 7 bits
@@ -62,32 +62,56 @@ Instruction parse_instruction(uint32_t instruction_bits) {
 
   // I-Type
   case 0x13: // 0x11 OR 0x1110011
-    iTypeInstructions(instruction, instruction_bits);
-    /* // 0000 0001 0101 1010 0000 0100 1
-    // instruction.itype.rd = instruction_bits;
-    // instruction_bits >>= 5;
+    //iTypeInstructions(instruction, instruction_bits);
+    // 0000 0001 0101 1010 0000 0100 1
+    instruction.itype.rd = instruction_bits;
+    instruction_bits >>= 5;
 
-    // // 0000 0001 0101 1010 0000
-    // instruction.itype.funct3 = instruction_bits;
-    // instruction_bits >>= 3;
+    // 0000 0001 0101 1010 0000
+    instruction.itype.funct3 = instruction_bits;
+    instruction_bits >>= 3;
 
-    // // 0000 0001 0101 1010 0
-    // instruction.itype.rs1 = instruction_bits;
-    // instruction_bits >>= 5;
+    // 0000 0001 0101 1010 0
+    instruction.itype.rs1 = instruction_bits;
+    instruction_bits >>= 5;
 
-    // // 0000 0001 0101
-    // instruction.itype.imm = instruction_bits;
-    // instruction_bits >>= 12; */
+    // 0000 0001 0101
+    instruction.itype.imm = instruction_bits;
+    instruction_bits >>= 12;
   break;
 
   // I-Type
   case 0x3:
-    iTypeInstructions(instruction, instruction_bits);
+    //iTypeInstructions(instruction, instruction_bits);
+    // 0000 0001 0101 1010 0000 0100 1
+    instruction.itype.rd = instruction_bits;
+    instruction_bits >>= 5;
+    // 0000 0001 0101 1010 0000
+    instruction.itype.funct3 = instruction_bits;
+    instruction_bits >>= 3;
+    // 0000 0001 0101 1010 0
+    instruction.itype.rs1 = instruction_bits;
+    instruction_bits >>= 5;
+    // 0000 0001 0101
+    instruction.itype.imm = instruction_bits;
+    instruction_bits >>= 12;
   break;
 
   // I-Type
   case 0x73:
-    iTypeInstructions(instruction, instruction_bits);
+  // 0000 0001 0101 1010 0000 0100 1
+    instruction.itype.rd = instruction_bits;
+    instruction_bits >>= 5;
+    // 0000 0001 0101 1010 0000
+    instruction.itype.funct3 = instruction_bits;
+    instruction_bits >>= 3;
+    // 0000 0001 0101 1010 0
+    instruction.itype.rs1 = instruction_bits;
+    instruction_bits >>= 5;
+    // 0000 0001 0101
+    instruction.itype.imm = instruction_bits;
+    instruction_bits >>= 12;
+    //iTypeInstructions(instruction, instruction_bits);
   break;
 
   // S-Type
