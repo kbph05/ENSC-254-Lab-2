@@ -8,7 +8,25 @@
 //// Kirstin ////
 Instruction parse_instruction(uint32_t instruction_bits) {
   /* YOUR CODE HERE */
+  //// Helper Function which sets instructions for all the different opcodes of I-type instructions: ////
+  Instruction iTypeInstructions(Instruction instruction, uint32_t instruction_bits) {
 
+    // 0000 0001 0101 1010 0000 0100 1
+    instruction.itype.rd = instruction_bits;
+    instruction_bits >>= 5;
+    // 0000 0001 0101 1010 0000
+    instruction.itype.funct3 = instruction_bits;
+    instruction_bits >>= 3;
+    // 0000 0001 0101 1010 0
+    instruction.itype.rs1 = instruction_bits;
+    instruction_bits >>= 5;
+    // 0000 0001 0101
+    instruction.itype.imm = instruction_bits;
+    instruction_bits >>= 12;
+  
+    return instruction;
+  }
+  
   Instruction instruction;
   // add x9, x20, x21   hex: 01 5A 04 B3, binary = 0000 0001 0101 1010 0000 0100 1011 0011
   // Opcode: 0110011 (0x33) Get the Opcode by &ing 0x1111111, bottom 7 bits
@@ -159,28 +177,6 @@ Instruction parse_instruction(uint32_t instruction_bits) {
 /* Here, you will need to implement a few common helper functions, 
  * which you will call in other functions when parsing, printing, 
  * or executing the instructions. */
-
-//// Helper Function which sets instructions for all the different opcodes of I-type instructions: ////
-Instruction iTypeInstructions(Instruction instruction, uint32_t instruction_bits) {
-
-    // 0000 0001 0101 1010 0000 0100 1
-    instruction.itype.rd = instruction_bits;
-    instruction_bits >>= 5;
-
-    // 0000 0001 0101 1010 0000
-    instruction.itype.funct3 = instruction_bits;
-    instruction_bits >>= 3;
-
-    // 0000 0001 0101 1010 0
-    instruction.itype.rs1 = instruction_bits;
-    instruction_bits >>= 5;
-
-    // 0000 0001 0101
-    instruction.itype.imm = instruction_bits;
-    instruction_bits >>= 12;
-  
-    return instruction;
-}
 
 /* Sign extends the given field to a 32-bit integer where field is
  * interpreted an n-bit integer. */
