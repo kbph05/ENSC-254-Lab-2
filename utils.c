@@ -8,7 +8,8 @@
 //// Kirstin ////
 Instruction parse_instruction(uint32_t instruction_bits) {
   /* YOUR CODE HERE */
-  //// Helper Function which sets instructions for all the different opcodes of I-type instructions: ////
+
+  //// Helper Function which sets instructions for all the different opcodes of I-type instructions (why does it not work) ////
   Instruction iTypeInstructions(Instruction instruction, uint32_t instruction_bits) {
 
     // 0000 0001 0101 1010 0000 0100 1
