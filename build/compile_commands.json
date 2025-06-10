@@ -1,0 +1,50 @@
+[
+{
+  "directory": "/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build",
+  "command": "/usr/bin/gcc -DCU_BUILD_DLL -I/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build -I/net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Headers -g -o CMakeFiles/libcunit.dir/CUnit/Sources/Automated/Automated.c.o -c /net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Sources/Automated/Automated.c",
+  "file": "/net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Sources/Automated/Automated.c",
+  "output": "CMakeFiles/libcunit.dir/CUnit/Sources/Automated/Automated.c.o"
+},
+{
+  "directory": "/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build",
+  "command": "/usr/bin/gcc -DCU_BUILD_DLL -I/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build -I/net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Headers -g -o CMakeFiles/libcunit.dir/CUnit/Sources/Basic/Basic.c.o -c /net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Sources/Basic/Basic.c",
+  "file": "/net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Sources/Basic/Basic.c",
+  "output": "CMakeFiles/libcunit.dir/CUnit/Sources/Basic/Basic.c.o"
+},
+{
+  "directory": "/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build",
+  "command": "/usr/bin/gcc -DCU_BUILD_DLL -I/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build -I/net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Headers -g -o CMakeFiles/libcunit.dir/CUnit/Sources/Console/Console.c.o -c /net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Sources/Console/Console.c",
+  "file": "/net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Sources/Console/Console.c",
+  "output": "CMakeFiles/libcunit.dir/CUnit/Sources/Console/Console.c.o"
+},
+{
+  "directory": "/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build",
+  "command": "/usr/bin/gcc -DCU_BUILD_DLL -I/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build -I/net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Headers -g -o CMakeFiles/libcunit.dir/CUnit/Sources/Framework/CUError.c.o -c /net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Sources/Framework/CUError.c",
+  "file": "/net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Sources/Framework/CUError.c",
+  "output": "CMakeFiles/libcunit.dir/CUnit/Sources/Framework/CUError.c.o"
+},
+{
+  "directory": "/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build",
+  "command": "/usr/bin/gcc -DCU_BUILD_DLL -I/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build -I/net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Headers -g -o CMakeFiles/libcunit.dir/CUnit/Sources/Framework/MyMem.c.o -c /net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Sources/Framework/MyMem.c",
+  "file": "/net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Sources/Framework/MyMem.c",
+  "output": "CMakeFiles/libcunit.dir/CUnit/Sources/Framework/MyMem.c.o"
+},
+{
+  "directory": "/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build",
+  "command": "/usr/bin/gcc -DCU_BUILD_DLL -I/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build -I/net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Headers -g -o CMakeFiles/libcunit.dir/CUnit/Sources/Framework/TestDB.c.o -c /net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Sources/Framework/TestDB.c",
+  "file": "/net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Sources/Framework/TestDB.c",
+  "output": "CMakeFiles/libcunit.dir/CUnit/Sources/Framework/TestDB.c.o"
+},
+{
+  "directory": "/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build",
+  "command": "/usr/bin/gcc -DCU_BUILD_DLL -I/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build -I/net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Headers -g -o CMakeFiles/libcunit.dir/CUnit/Sources/Framework/TestRun.c.o -c /net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Sources/Framework/TestRun.c",
+  "file": "/net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Sources/Framework/TestRun.c",
+  "output": "CMakeFiles/libcunit.dir/CUnit/Sources/Framework/TestRun.c.o"
+},
+{
+  "directory": "/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build",
+  "command": "/usr/bin/gcc -DCU_BUILD_DLL -I/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build -I/net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Headers -g -o CMakeFiles/libcunit.dir/CUnit/Sources/Framework/Util.c.o -c /net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Sources/Framework/Util.c",
+  "file": "/net/home/lll10/ENSC_254/ENSC-254-Lab-2/CUnit-code/CUnit/Sources/Framework/Util.c",
+  "output": "CMakeFiles/libcunit.dir/CUnit/Sources/Framework/Util.c.o"
+}
+]

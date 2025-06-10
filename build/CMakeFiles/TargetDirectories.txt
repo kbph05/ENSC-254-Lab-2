@@ -1,0 +1,7 @@
+/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build/CMakeFiles/libcunit.dir
+/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build/CMakeFiles/edit_cache.dir
+/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build/CMakeFiles/rebuild_cache.dir
+/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build/CMakeFiles/list_install_components.dir
+/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build/CMakeFiles/install.dir
+/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build/CMakeFiles/install/local.dir
+/net/home/lll10/ENSC_254/ENSC-254-Lab-2/build/CMakeFiles/install/strip.dir

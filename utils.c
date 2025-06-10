@@ -254,8 +254,19 @@ int get_jump_offset(Instruction instruction) {
 /* Returns the number of bytes (from the current PC) to the base address using the
  * given store instruction */
 int get_store_offset(Instruction instruction) {
-  /* YOUR CODE HERE */
-  return 0;
+  uint32_t container1 = instruction.stype.imm5;
+  uint32_t container2 = instruction.stype.imm7;
+  /*uint32_t imm = 0x0;
+  uint32_t imm_4_1 = (container1 >> 1) & 0xF;
+  uint32_t imm11 = (container1 >> 0) & 0x1;
+  uint32_t imm_10_5 = (container2 >> 0) & 0x2F;
+  uint32_t imm12 = (container2 >> 6) & 0x1;
+
+  imm = (imm12 << 12) |
+        (imm11 << 11) |
+        (imm_10_5 << 10) |
+        (imm_4_1 << 0); */
+  return (container1 | (container2 << 5));
 }
 /************************Helper functions************************/
 
