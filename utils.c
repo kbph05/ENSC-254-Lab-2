@@ -226,15 +226,19 @@ int sign_extend_number(unsigned int field, unsigned int n) {
  * the given branch instruction */
 int get_branch_offset(Instruction instruction) {
   /* YOUR CODE HERE */
-
-  return 0;
+  int imm = instruction.sbtype.imm5;
+  return imm;
 }
 
 /* Returns the number of bytes (from the current PC) to the jump label using the
  * given jump instruction */
 int get_jump_offset(Instruction instruction) {
   /* YOUR CODE HERE */
-  return 0;
+  int mask;
+  int imm = instruction.ujtype.imm;
+
+  int mask1 = (instruction.ujtype.imm >> 7 & ~(0U << 7) - 1);
+  return imm;
 }
 
 /* Returns the number of bytes (from the current PC) to the base address using the
