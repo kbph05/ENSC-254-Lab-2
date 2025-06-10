@@ -65,12 +65,12 @@ Instruction parse_instruction(uint32_t instruction_bits) {
   case 0x13: // 0x11 OR 0x1110011
     //iTypeInstructions(instruction, instruction_bits);
     // 0000 0001 0101 1010 0000 0100 1
-    instruction.itype.rd = instruction_bits;
+    instruction.itype.rd = instruction_bits & ((1U << 5) - 1);
     instruction_bits >>= 5;
 
     // 0000 0001 0101 1010 0000
-    instruction.itype.funct3 = instruction_bits;
-    instruction_bits >>= 3;
+    instruction.itype.funct3 = instruction_bits & ((1U << 3) - 1);
+    instruction_bits >>= 3 ;
 
     // 0000 0001 0101 1010 0
     instruction.itype.rs1 = instruction_bits;
@@ -205,7 +205,7 @@ Instruction parse_instruction(uint32_t instruction_bits) {
 
 /* Sign extends the given field to a 32-bit integer where field is
  * interpreted an n-bit integer. */
-//// Kirstin ////
+
 int sign_extend_number(unsigned int field, unsigned int n) {
   /* YOUR CODE HERE */
 
@@ -254,19 +254,13 @@ int get_jump_offset(Instruction instruction) {
 /* Returns the number of bytes (from the current PC) to the base address using the
  * given store instruction */
 int get_store_offset(Instruction instruction) {
-  uint32_t container1 = instruction.stype.imm5;
-  uint32_t container2 = instruction.stype.imm7;
-  /*uint32_t imm = 0x0;
-  uint32_t imm_4_1 = (container1 >> 1) & 0xF;
-  uint32_t imm11 = (container1 >> 0) & 0x1;
-  uint32_t imm_10_5 = (container2 >> 0) & 0x2F;
-  uint32_t imm12 = (container2 >> 6) & 0x1;
 
-  imm = (imm12 << 12) |
-        (imm11 << 11) |
-        (imm_10_5 << 10) |
-        (imm_4_1 << 0); */
-  return (container1 | (container2 << 5));
+  uint32_t imm = 0x0; // set a bit string of 0s for storing imm5 and imm7
+  uint32_t imm5 = instruction.stype.imm5; // imm[4:0]
+  uint32_t imm7 = instruction.stype.imm7; // imm[11:5]
+
+  imm = ((imm7 << 5 | imm5)); // set imm equal to imm7, shifted by 5 bits to make room for imm5, which is ORed with imm7
+  return imm;
 }
 /************************Helper functions************************/
 
