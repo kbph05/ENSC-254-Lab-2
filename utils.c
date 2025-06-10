@@ -225,14 +225,21 @@ int sign_extend_number(unsigned int field, unsigned int n) {
 /* Return the number of bytes (from the current PC) to the branch label using
  * the given branch instruction */
 int get_branch_offset(Instruction instruction) {
+<<<<<<< HEAD
   
 
   return 0;
+=======
+  /* YOUR CODE HERE */
+  int imm = instruction.sbtype.imm5;
+  return imm;
+>>>>>>> 873845a196ff93ac8830b9290cbc8cc7252f174b
 }
 
 /* Returns the number of bytes (from the current PC) to the jump label using the
  * given jump instruction */
 int get_jump_offset(Instruction instruction) {
+<<<<<<< HEAD
   //000000000001 00000 000 || 00000 1101111 -> scrambled to imm [20 | 10:1 | 11 | 19:12]
   uint32_t container = instruction.ujtype.imm; //000000000001 00000 000 [1:20] (12:31)
 
@@ -251,6 +258,13 @@ int get_jump_offset(Instruction instruction) {
   container = container << 1;
   int imm = container;
 
+=======
+  /* YOUR CODE HERE */
+  int mask;
+  int imm = instruction.ujtype.imm;
+
+  int mask1 = (instruction.ujtype.imm >> 7 & ~(0U << 7) - 1);
+>>>>>>> 873845a196ff93ac8830b9290cbc8cc7252f174b
   return imm;
 }
 
