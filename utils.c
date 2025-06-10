@@ -225,47 +225,30 @@ int sign_extend_number(unsigned int field, unsigned int n) {
 /* Return the number of bytes (from the current PC) to the branch label using
  * the given branch instruction */
 int get_branch_offset(Instruction instruction) {
-<<<<<<< HEAD
-  
-
-  return 0;
-=======
-  /* YOUR CODE HERE */
   int imm = instruction.sbtype.imm5;
   return imm;
->>>>>>> 873845a196ff93ac8830b9290cbc8cc7252f174b
+
 }
 
 /* Returns the number of bytes (from the current PC) to the jump label using the
  * given jump instruction */
 int get_jump_offset(Instruction instruction) {
-<<<<<<< HEAD
-  //000000000001 00000 000 || 00000 1101111 -> scrambled to imm [20 | 10:1 | 11 | 19:12]
-  uint32_t container = instruction.ujtype.imm; //000000000001 00000 000 [1:20] (12:31)
+  // 00000000010000000000 10011 1101111
+  uint32_t container = instruction.ujtype.imm; // 00000000010000000000
 
-/* Assuming that the immediate is not arranged already
-  uint32_t imm_20 = (container >> 19) & 0x1;
-  uint32_t imm_10_1 = (container >> 0) & 0x3FF;
-  uint32_t imm_11 = (container >>10) & 0x1;
-  uint32_t imm_19_12 = (container >> 11) & 0xFF;
+  uint32_t imm = 0x0;
+  uint32_t imm_20 = (container >> 19) & 0x1; //In decoded immediate order
+  uint32_t imm_10_1 = (container >> 10) & 0x3FF;
+  uint32_t imm_11 = (container >> 9) & 0x1;
+  uint32_t imm_19_12 = (container >> 0) & 0xFF;
 
-  uint32_t imm = (imm_20 << 20) |
-                 (imm_10_1 << 1) |
-                 (imm_11 << 11) |
-                 (imm_19_12 << 12);
-*/
-  container = (container << 11) >> 11;
-  container = container << 1;
-  int imm = container;
+  imm = (imm_20 << 20) | //Rearranges them to [20:1]
+        (imm_19_12 << 12) |
+        (imm_11 << 11) |
+        (imm_10_1 << 1);
 
-=======
-  /* YOUR CODE HERE */
-  int mask;
-  int imm = instruction.ujtype.imm;
-
-  int mask1 = (instruction.ujtype.imm >> 7 & ~(0U << 7) - 1);
->>>>>>> 873845a196ff93ac8830b9290cbc8cc7252f174b
-  return imm;
+  //return (instruction.ujtype.imm >> 8);
+  return (imm << 1);
 }
 
 /* Returns the number of bytes (from the current PC) to the base address using the
