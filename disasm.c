@@ -319,7 +319,7 @@ void print_store(char *name, Instruction instruction) {
 }
 
 void print_branch(char *name, Instruction instruction) {
-    printf(BRANCH_FORMAT, name, instruction.sbtype.rs1, instruction.sbtype.rs2, instruction)
+    printf(BRANCH_FORMAT, name, instruction.sbtype.rs1, instruction.sbtype.rs2, ((instruction.sbtype.imm7 << 5) | instruction.sbtype.imm5));
 }
 
 void print_lui(Instruction instruction) {
@@ -331,5 +331,5 @@ void print_jal(Instruction instruction) {
 }
 
 void print_ecall(Instruction instruction) {
-    printf(ECALL_FORMAT)
+    printf(ECALL_FORMAT);
 }
