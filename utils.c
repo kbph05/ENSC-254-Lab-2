@@ -208,13 +208,18 @@ Instruction parse_instruction(uint32_t instruction_bits) {
 //// Kirstin ////
 int sign_extend_number(unsigned int field, unsigned int n) {
   /* YOUR CODE HERE */
-  unsigned int extendedNumber : 32;
-  field >>= n;
-  extendedNumber = field;
-  // field: 1 0101 1010 0000 0100 1011 0011
-  // want: 0000 0001 0101 1010 0000 0100 1011 0011
 
-  return extendedNumber;
+  // Takes the field and masks it with a bit mask of 1s except for the last n bits being 0.
+  int mask1 = (~(0) << n);
+  int extend = (mask1 | field);
+
+  // Type cast the field to determine if the value is negative or positive
+  int typeCast = (int)extend;
+  int mask2 = 1 << (n - 1); // bit mask of 1s to obtain the MSB
+  int isNegative = !(!(typeCast & mask2)); // double logical negate it to get a single bit of 1 (if negative) and 0 (if positive)
+
+  // return extend with the extended mask of 1 bits if negative; otherwise return field itself
+  return (isNegative) ? (extend) : (field);
 }
 
 /* Return the number of bytes (from the current PC) to the branch label using
