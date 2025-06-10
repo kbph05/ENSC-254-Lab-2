@@ -241,7 +241,6 @@ int get_jump_offset(Instruction instruction) {
 /* Returns the number of bytes (from the current PC) to the base address using the
  * given store instruction */
 int get_store_offset(Instruction instruction) {
-  /* YOUR CODE HERE */
 
   uint32_t imm = 0x0; // set a bit string of 0s for storing imm5 and imm7
   uint32_t imm5 = instruction.stype.imm5; // imm[4:0]
