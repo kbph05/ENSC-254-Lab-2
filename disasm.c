@@ -11,7 +11,7 @@ void print_branch(char *, Instruction);
 void print_lui(Instruction);
 void print_jal(Instruction);
 void print_ecall(Instruction);
-void write_rtype(Instruction);
+void write_rtype(Instruction); 
 void write_itype_except_load(Instruction); 
 void write_load(Instruction);
 void write_store(Instruction);
@@ -259,8 +259,15 @@ void write_load(Instruction instruction) {
 
 void write_store(Instruction instruction) {
     switch (instruction.stype.funct3) {
-      /* YOUR CODE HERE */
-      /* call print_store */
+        case 0x0:
+            print_store("sb", instruction);
+            break;
+        case 0x1:
+            print_store("sh", instruction);
+            break;
+        case 0x2:
+            print_store("sw", instruction);
+            break;
         default:
             handle_invalid_instruction(instruction);
             break;
@@ -269,8 +276,24 @@ void write_store(Instruction instruction) {
 
 void write_branch(Instruction instruction) {
     switch (instruction.sbtype.funct3) {
-      /* YOUR CODE HERE */
-      /* call print_branch */
+        case 0x0:
+            print_branch("beq", instruction);
+            break;
+        case 0x1:
+            print_branch("bne", instruction);
+            break;
+        case 0x4:
+            print_branch("blt", instruction);
+            break;
+        case 0x5:
+            print_branch("bge", instruction);
+            break;
+        case 0x6:
+            print_branch("bltu", instruction);
+            break;
+        case 0x7:
+            print_branch("bgeu", instruction);
+            break;
         default:
             handle_invalid_instruction(instruction);
             break;
@@ -288,25 +311,25 @@ void print_itype_except_load(char *name, Instruction instruction, int imm) {
 }
 
 void print_load(char *name, Instruction instruction) {
-    /* YOUR CODE HERE */
+    printf(MEM_FORMAT, name, instruction.itype.rd, instruction.itype.imm, instruction.itype.rs1);
 }
 
 void print_store(char *name, Instruction instruction) {
-    /* YOUR CODE HERE */
+    printf(MEM_FORMAT, name, instruction.stype.rs2, ((instruction.stype.imm7 << 5) | instruction.stype.imm5), instruction.stype.rs1);
 }
 
 void print_branch(char *name, Instruction instruction) {
-    /* YOUR CODE HERE */
+    printf(BRANCH_FORMAT, name, instruction.sbtype.rs1, instruction.sbtype.rs2, instruction)
 }
 
 void print_lui(Instruction instruction) {
-    /* YOUR CODE HERE */
+    printf(LUI_FORMAT, instruction.utype.rd, instruction.utype.imm);
 }
 
 void print_jal(Instruction instruction) {
-    /* YOUR CODE HERE */
+    printf(JAL_FORMAT, instruction.ujtype.rd, instruction.ujtype.imm);
 }
 
 void print_ecall(Instruction instruction) {
-    /* YOUR CODE HERE */
+    printf(ECALL_FORMAT)
 }
