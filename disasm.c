@@ -212,7 +212,7 @@ void write_itype_except_load(Instruction instruction) {
         case 0x5:
             switch (extracted_imm) {
                 case 0x00:
-                    print_itype_except_load("slli", instruction, instruction.itype.imm);
+                    print_itype_except_load("srli", instruction, instruction.itype.imm);
                     break;
                 case 0x20:
                     print_itype_except_load("srai", instruction, instruction.itype.imm);
@@ -221,6 +221,7 @@ void write_itype_except_load(Instruction instruction) {
                 handle_invalid_instruction(instruction);
                 break;
             }
+        break;
         case 0x6:
             print_itype_except_load("ori", instruction, instruction.itype.imm);
             break;
@@ -307,7 +308,7 @@ void print_rtype(char *name, Instruction instruction) {
 
 void print_itype_except_load(char *name, Instruction instruction, int imm) {
     printf(ITYPE_FORMAT, name, instruction.itype.rd, instruction.itype.rs1,
-        instruction.itype.imm);
+        sign_extend_number(instruction.itype.imm, 12));
 }
 
 void print_load(char *name, Instruction instruction) {
@@ -315,11 +316,11 @@ void print_load(char *name, Instruction instruction) {
 }
 
 void print_store(char *name, Instruction instruction) {
-    printf(MEM_FORMAT, name, instruction.stype.rs2, ((instruction.stype.imm7 << 5) | instruction.stype.imm5), instruction.stype.rs1);
+    printf(MEM_FORMAT, name, instruction.stype.rs2, get_store_offset(instruction), instruction.stype.rs1);
 }
 
 void print_branch(char *name, Instruction instruction) {
-    printf(BRANCH_FORMAT, name, instruction.sbtype.rs1, instruction.sbtype.rs2, ((instruction.sbtype.imm7 << 5) | instruction.sbtype.imm5));
+    printf(BRANCH_FORMAT, name, instruction.sbtype.rs1, instruction.sbtype.rs2, get_branch_offset(instruction));
 }
 
 void print_lui(Instruction instruction) {
@@ -327,7 +328,7 @@ void print_lui(Instruction instruction) {
 }
 
 void print_jal(Instruction instruction) {
-    printf(JAL_FORMAT, instruction.ujtype.rd, instruction.ujtype.imm);
+    printf(JAL_FORMAT, instruction.ujtype.rd, get_jump_offset(instruction));
 }
 
 void print_ecall(Instruction instruction) {
