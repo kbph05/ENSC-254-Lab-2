@@ -123,7 +123,7 @@ Instruction parse_instruction(uint32_t instruction_bits) {
     instruction_bits >>= 5;
 
     // 0000 000
-    instruction.stype.imm7 = instruction_bits;
+    instruction.stype.imm7 = instruction_bits & ((1U << 7) - 1);
     
   break;
 
@@ -212,9 +212,15 @@ int sign_extend_number(unsigned int field, unsigned int n) {
 /* Return the number of bytes (from the current PC) to the branch label using
  * the given branch instruction */
 int get_branch_offset(Instruction instruction) {
-  int imm = instruction.sbtype.imm5;
+  
+  uint32_t imm = 0x0;
+  uint32_t imm12 = instruction.sbtype.imm7 >> 6;
+  uint32_t imm10_5 = instruction.sbtype.imm7 & ~(1U << 6);
+  uint32_t imm11 = instruction.sbtype.imm5 >> 5;
+  uint32_t imm4_1 = instruction.sbtype.imm5 & ~(1U << 4);
+  
+  imm = (imm12 << 11) | (imm11 << 10) | (imm10_5 << 5) | (imm4_1);
   return imm;
-
 }
 
 /* Returns the number of bytes (from the current PC) to the jump label using the
@@ -246,7 +252,7 @@ int get_store_offset(Instruction instruction) {
   uint32_t imm5 = instruction.stype.imm5; // imm[4:0]
   uint32_t imm7 = instruction.stype.imm7; // imm[11:5]
 
-  imm = ((imm7 << 5 | imm5)); // set imm equal to imm7, shifted by 5 bits to make room for imm5, which is ORed with imm7
+  imm = (imm7 << 5 | imm5); // set imm equal to imm7, shifted by 5 bits to make room for imm5, which is ORed with imm7
   return imm;
 }
 /************************Helper functions************************/
