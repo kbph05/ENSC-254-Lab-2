@@ -227,22 +227,25 @@ int get_branch_offset(Instruction instruction) {
 /* Returns the number of bytes (from the current PC) to the jump label using the
  * given jump instruction */
 int get_jump_offset(Instruction instruction) {
+  /**/
   // 00000000010000000000 10011 1101111
-  uint32_t container = instruction.ujtype.imm; // 00000000010000000000
+  int container = instruction.ujtype.imm; // assign immediate
+  int imm = 0x0;
 
-  uint32_t imm = 0x0;
-  uint32_t imm_20 = (container >> 19) & 0x1; //In decoded immediate order
-  uint32_t imm_10_1 = (container >> 10) & 0x3FF;
-  uint32_t imm_11 = (container >> 9) & 0x1;
-  uint32_t imm_19_12 = (container >> 0) & 0xFF;
 
-  imm = (imm_20 << 20) | //Rearranges them to [20:1]
+  int imm_20 = (container >> 19) & 0x1; //In decoded immediate order, grabbing 20th bit
+  int imm_10_1 = (container >> 10) & 0x3FF; //grabbing [10:1] bit
+  int imm_11 = (container >> 8) & 0x1; //Grabbing 11th bit
+  int imm_19_12 = (container >> 0) & 0xFF;
+
+  imm = (imm_20 << 20) |
         (imm_19_12 << 12) |
         (imm_11 << 11) |
         (imm_10_1 << 1);
 
+    return (imm << 1);
+  
   //return (instruction.ujtype.imm >> 8);
-  return (imm << 1);
 }
 
 /* Returns the number of bytes (from the current PC) to the base address using the
