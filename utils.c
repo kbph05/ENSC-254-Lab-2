@@ -213,14 +213,15 @@ int sign_extend_number(unsigned int field, unsigned int n) {
  * the given branch instruction */
 int get_branch_offset(Instruction instruction) {
   
+  // use shifts and bitmasking to obtain the bits
   uint32_t imm = 0x0;
-  uint32_t imm12 = instruction.sbtype.imm7 >> 6;
-  uint32_t imm10_5 = instruction.sbtype.imm7 & ~(1U << 6);
-  uint32_t imm11 = instruction.sbtype.imm5 >> 5;
-  uint32_t imm4_1 = instruction.sbtype.imm5 & ~(1U << 4);
+  uint32_t imm12 = (instruction.sbtype.imm7 >> 6) & 0x1;
+  uint32_t imm10_5 = (instruction.sbtype.imm7) & 0x3F;
+  uint32_t imm11 = (instruction.sbtype.imm5) & 0x1;
+  uint32_t imm4_1 = (instruction.sbtype.imm5 >> 1) & 0x1F;
   
-  imm = (imm12 << 11) | (imm11 << 10) | (imm10_5 << 5) | (imm4_1);
-  return imm;
+  imm = (imm12 << 12) | (imm11 << 11) | (imm10_5 << 5) | (imm4_1 << 1); // because imm is 12:1, theres one extra bit at position 0. must shift so that theres an extra bit at position 0
+  return sign_extend_number(imm, 13); // must sign extend to extend the offset bits
 }
 
 /* Returns the number of bytes (from the current PC) to the jump label using the
