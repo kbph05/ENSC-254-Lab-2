@@ -1,0 +1,10 @@
+00001000: xori	x5, x31, 1363
+00001004: srai	x4, x5, 5
+00001008: div	x7, x5, x4
+0000100c: srl	x28, x29, x30
+00001010: Invalid Instruction: 0x10191793
+00001014: lb	x7, 2047(x4)
+00001018: Invalid Instruction: 0x0842f3b3
+0000101c: sh	x7, 1882(x4)
+00001020: bne	x20, x19, 1948
+00001024: lui	x7, 90332
