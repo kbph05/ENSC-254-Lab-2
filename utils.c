@@ -59,7 +59,6 @@ Instruction parse_instruction(uint32_t instruction_bits) {
 
     // 0000 0001 0101
     instruction.itype.imm = instruction_bits & ((1U << 12) - 1);
-    instruction_bits >>= 12;
   break;
 
   // I-Type
@@ -74,12 +73,11 @@ Instruction parse_instruction(uint32_t instruction_bits) {
     instruction_bits >>= 3;
 
     // 0000 0001 0101 1010 0
-    instruction.itype.rs1 = instruction_bits & ((1U << 12) - 1);
+    instruction.itype.rs1 = instruction_bits & ((1U << 5) - 1);
     instruction_bits >>= 5;
 
     // 0000 0001 0101
-    instruction.itype.imm = instruction_bits;
-    instruction_bits >>= 12;
+    instruction.itype.imm = instruction_bits & ((1U << 12) - 1);;
 
   break;
 
@@ -196,17 +194,16 @@ Instruction parse_instruction(uint32_t instruction_bits) {
 int sign_extend_number(unsigned int field, unsigned int n) {
   /* YOUR CODE HERE */
 
-  // Takes the field and masks it with a bit mask of 1s except for the last n bits being 0.
-  int mask1 = (~(0) << n);
-  int extend = (mask1 | field);
+  // Shift the bits left by 32 - n to get the MSB at position 31
+  int shift1 = (field << (32 - n));
 
-  // Type cast the field to determine if the value is negative or positive
-  int typeCast = (int)extend;
-  int mask2 = 1 << (n - 1); // bit mask of 1s to obtain the MSB
-  int isNegative = !(!(typeCast & mask2)); // double logical negate it to get a single bit of 1 (if negative) and 0 (if positive)
+  // Sign cast the shift so that when its shifted back to the right it will shift right arithmetrically
+  int signCast = (int)shift1;
 
-  // return extend with the extended mask of 1 bits if negative; otherwise return field itself
-  return (isNegative) ? (extend) : (field);
+  // Shift the bits back to the right by 32. It will shift right arithmetrically, so depending on the signed bit, the new bits will be 1 or 0.
+  int shift2 = (signCast >> (32 - n));
+
+  return shift2;
 }
 
 /* Return the number of bytes (from the current PC) to the branch label using
