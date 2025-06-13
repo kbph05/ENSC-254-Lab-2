@@ -177,7 +177,7 @@ void write_rtype(Instruction instruction) {
 }
 
 void write_itype_except_load(Instruction instruction) {
-    uint32_t extracted_imm = (instruction.itype.imm >> 5) & ((1U << 7) - 1);
+    uint32_t extracted_imm = (instruction.itype.imm >> 5);
     
     switch (instruction.itype.funct3) {
         case 0x0:
@@ -212,10 +212,10 @@ void write_itype_except_load(Instruction instruction) {
         case 0x5:
             switch (extracted_imm) {
                 case 0x00:
-                    print_itype_except_load("srli", instruction, instruction.itype.imm);
+                    print_itype_except_load("srli", instruction, instruction.itype.imm & ((1U << 5) -1));
                     break;
                 case 0x20:
-                    print_itype_except_load("srai", instruction, instruction.itype.imm);
+                    print_itype_except_load("srai", instruction, instruction.itype.imm & ((1U << 5) -1));
                     break;
             default:
                 handle_invalid_instruction(instruction);
@@ -308,7 +308,7 @@ void print_rtype(char *name, Instruction instruction) {
 
 void print_itype_except_load(char *name, Instruction instruction, int imm) {
     printf(ITYPE_FORMAT, name, instruction.itype.rd, instruction.itype.rs1,
-        sign_extend_number(instruction.itype.imm, 12));
+        imm);
 }
 
 void print_load(char *name, Instruction instruction) {
