@@ -171,15 +171,15 @@ void store(Byte *memory, Address address, Alignment alignment, Word value) {
     // memory is an pointer to an address
     switch(alignment) {
         case LENGTH_BYTE:
-            value = load(memory, address, alignment);
+            memory[address] = value;
         break;
 
         case LENGTH_HALF_WORD:
-            value = load(memory, address, alignment);
+            memory[address] = value;
         break;
 
         case LENGTH_WORD:
-            value = load(memory, address, alignment);
+            memory[address] = value;
         break;
 
         default:
