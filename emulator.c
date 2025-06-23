@@ -164,9 +164,28 @@ void execute_lui(Instruction instruction, Processor *processor) {
 }
 
 void store(Byte *memory, Address address, Alignment alignment, Word value) {
-    /* YOUR CODE HERE 
-    reference the load function here. muust include 3 cases: LENGTH BYTE, LENGTH HALF WORD, LENGTH WORD
-   if(alignment == LENGTH_BYTE) {
+    /* YOUR CODE HERE */ 
+    // reference the load function here. muust include 3 cases: LENGTH BYTE, LENGTH HALF WORD, LENGTH WORD
+
+    // address is a 32 bit address in memory
+    // memory is an pointer to an address
+    switch(alignment) {
+        case LENGTH_BYTE:
+            value = load(memory, address, alignment);
+        break;
+
+        case LENGTH_HALF_WORD:
+            value = load(memory, address, alignment);
+        break;
+
+        case LENGTH_WORD:
+            value = load(memory, address, alignment);
+        break;
+
+        default:
+        break;
+    }
+   /* if(alignment == LENGTH_BYTE) {
         memory[address] = value & 0xFF;
     } else if(alignment == LENGTH_HALF_WORD) {
         memory[address] = value & 0xFF;
@@ -177,19 +196,20 @@ void store(Byte *memory, Address address, Alignment alignment, Word value) {
     } else {
         printf("Error: Unrecognized alignment %d\n", alignment);
         exit(-1);
-    } */
-
+    } 
+    */
 
 }
 
 Word load(Byte *memory, Address address, Alignment alignment) {
+    // chooses which n bytes to return 
     if(alignment == LENGTH_BYTE) {
-        return memory[address];
+        return memory[address]; // return memory at address at first location
     } else if(alignment == LENGTH_HALF_WORD) {
-        return (memory[address+1] << 8) + memory[address];
+        return (memory[address+1] << 8) + memory[address]; // return memory at address at 1 and 2 locations
     } else if(alignment == LENGTH_WORD) {
-        return (memory[address+3] << 24) + (memory[address+2] << 16)
-               + (memory[address+1] << 8) + memory[address];
+        return (memory[address+3] << 24) + (memory[address+2] << 16) 
+               + (memory[address+1] << 8) + memory[address]; // return memory at addresses 1 2 and 3 locations
     } else {
         printf("Error: Unrecognized alignment %d\n", alignment);
         exit(-1);

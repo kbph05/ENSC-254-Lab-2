@@ -35,9 +35,9 @@ typedef struct {
 /* Possible lengths of data, and their lengths in bytes.
  These are used to align memory*/
 typedef enum {
-    LENGTH_BYTE = 1,
-    LENGTH_HALF_WORD = 2,
-    LENGTH_WORD = 4,
+    LENGTH_BYTE = 1, // length: 1 * 8 = 8 bits
+    LENGTH_HALF_WORD = 2, // length: 2 * 8 = 16 bits
+    LENGTH_WORD = 4, // length: 4 * 8 = 32 bits
 } Alignment;
 
 /* This is the length of the memory space */
