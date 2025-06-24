@@ -281,11 +281,55 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
 
         case 0x4:
             //xori
+            processor->R[instruction.itype.rd] =
+            (Word)processor->R[instruction.itype.rs1] ^
+            (Word)processor->R[instruction.itype.imm];
+            break;
+        
+
+        case 0x5:
+            switch (instruction.itype.imm >> 5) {
+                case 0x0:
+                    // srli
+                    processor->R[instruction.itype.rd] =
+                    (Word)processor->R[instruction.itype.rs1] >>
+                    (sWord)processor->R[instruction.itype.imm & 0xF];
+                    break;
+
+                case 0x20:
+                    processor->R[instruction.itype.rd] =
+                    (sWord)processor->R[instruction.itype.rs1] >>
+                    (sWord)processor->R[instruction.itype.imm & 0xF];
+                    break;
+
+                default:
+                    handle_invalid_instruction(instruction);
+                    exit(-1);
+                    break;
+            break;
+            }
+        case 0x6:
+            //ori
+            processor->R[instruction.itype.rd] =
+            (sWord)processor->R[instruction.itype.rs1] |
+            (sWord)processor->R[instruction.itype.imm];
+            break;
+        
+
+        case 0x7:
+            // andi
+            processor->R[instruction.itype.rd] =
+            (sWord)processor->R[instruction.itype.rs1] &
+            (sWord)processor->R[instruction.itype.imm];
+            break;
+        
+            
             
         default:
             handle_invalid_instruction(instruction);
             break;
     }
+    processor->PC += 4;
 }
 
 void execute_ecall(Processor *p, Byte *memory) {
