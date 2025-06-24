@@ -451,7 +451,8 @@ void execute_jal(Instruction instruction, Processor *processor) {
 }
 
 void execute_lui(Instruction instruction, Processor *processor) {
-    /* YOUR CODE HERE */
+    processor->R[instruction.utype.rd] =
+    (sWord)processor->R[instruction.utype.imm] << 12;
 }
 
 void store(Byte *memory, Address address, Alignment alignment, Word value) {
