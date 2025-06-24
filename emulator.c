@@ -423,11 +423,11 @@ void execute_load(Instruction instruction, Processor *processor, Byte *memory) {
             break;
         case 0x4:
             // lbu
-            processor->R[instruction.itype.rd] = load(memory, (instruction.itype.rs1 +instruction.itype.imm), LENGTH_BYTE);
+            processor->R[instruction.itype.rd] = sign_extend_number(load(memory, (instruction.itype.rs1 +instruction.itype.imm), LENGTH_BYTE), 32 - LENGTH_BYTE);
             break;
         case 0x5:
             // lhu
-            processor->R[instruction.itype.rd] = load(memory, (instruction.itype.rs1 +instruction.itype.imm), LENGTH_HALF_WORD);
+            processor->R[instruction.itype.rd] = sign_extend_number(load(memory, (instruction.itype.rs1 +instruction.itype.imm), LENGTH_HALF_WORD), 32 - LENGTH_HALF_WORD);
             break;
         default:
             handle_invalid_instruction(instruction);
