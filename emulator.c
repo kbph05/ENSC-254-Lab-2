@@ -171,18 +171,17 @@ void store(Byte *memory, Address address, Alignment alignment, Word value) {
     // memory is an pointer to an address
     switch(alignment) {
         case LENGTH_BYTE:
-            memory[address] = value;
+            memory[address] = value & 0xFF; // store 1 byte of the value of the word by masking the first 8 bits of value
         break;
-
         case LENGTH_HALF_WORD:
-            memory[address] = value;
+            memory[address] = value & 0xFF;
+            memory[address + 1] = (value >> 8) & 0xFF;
         break;
-
         case LENGTH_WORD:
-            memory[address] = value;
-        break;
-
-        default:
+            memory[address] = value & 0xFF;
+            memory[address + 1] = (value >> 8) & 0xFF;
+            memory[address + 2] = (value >> 16) & 0xFF;
+            memory[address + 3] = (value >> 24) & 0xFF;
         break;
     }
    /* if(alignment == LENGTH_BYTE) {
@@ -204,14 +203,14 @@ void store(Byte *memory, Address address, Alignment alignment, Word value) {
 Word load(Byte *memory, Address address, Alignment alignment) {
     // chooses which n bytes to return 
     if(alignment == LENGTH_BYTE) {
-        return memory[address]; // return memory at address at first location
+        return memory[address]; // return value at memory at address at first location
     } else if(alignment == LENGTH_HALF_WORD) {
-        return (memory[address+1] << 8) + memory[address]; // return memory at address at 1 and 2 locations
+        return (memory[address+1] << 8) + memory[address]; // return value at memory at address at 1 and 2 locations
     } else if(alignment == LENGTH_WORD) {
         return (memory[address+3] << 24) + (memory[address+2] << 16) 
-               + (memory[address+1] << 8) + memory[address]; // return memory at addresses 1 2 and 3 locations
+               + (memory[address+1] << 8) + memory[address]; // return value at memory at addresses 1 2 and 3 locations
     } else {
         printf("Error: Unrecognized alignment %d\n", alignment);
         exit(-1);
     }
-}
+} 
