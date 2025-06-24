@@ -97,7 +97,6 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
 
 void execute_ecall(Processor *p, Byte *memory) {
     Register i;
-    
     // syscall number is given by a0 (x10)
     // argument is given by a1
     switch(p->R[10]) {
@@ -166,9 +165,7 @@ void execute_lui(Instruction instruction, Processor *processor) {
 void store(Byte *memory, Address address, Alignment alignment, Word value) {
     /* YOUR CODE HERE */ 
     // reference the load function here. muust include 3 cases: LENGTH BYTE, LENGTH HALF WORD, LENGTH WORD
-
     // address is a 32 bit address in memory
-    // memory is an pointer to an address
     switch(alignment) {
         case LENGTH_BYTE:
             memory[address] = value & 0xFF; // store 1 byte of the value of the word by masking the first 8 bits of value
@@ -184,20 +181,6 @@ void store(Byte *memory, Address address, Alignment alignment, Word value) {
             memory[address + 3] = (value >> 24) & 0xFF;
         break;
     }
-   /* if(alignment == LENGTH_BYTE) {
-        memory[address] = value & 0xFF;
-    } else if(alignment == LENGTH_HALF_WORD) {
-        memory[address] = value & 0xFF;
-        memory[address+] = value >> 8 & 0xFF;
-    } else if(alignment == LENGTH_WORD) {
-        return (memory[address+3] << 24) + (memory[address+2] << 16)
-               + (memory[address+1] << 8) + memory[address];
-    } else {
-        printf("Error: Unrecognized alignment %d\n", alignment);
-        exit(-1);
-    } 
-    */
-
 }
 
 Word load(Byte *memory, Address address, Alignment alignment) {
