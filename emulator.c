@@ -411,6 +411,8 @@ void execute_branch(Instruction instruction, Processor *processor) {
 void execute_load(Instruction instruction, Processor *processor, Byte *memory) {
     switch (instruction.itype.funct3) {
         case 0x0:
+            // lb
+            processor->R[instruction.itype.rd] =
 
         default:
             handle_invalid_instruction(instruction);
@@ -429,7 +431,9 @@ void execute_store(Instruction instruction, Processor *processor, Byte *memory) 
 }
 
 void execute_jal(Instruction instruction, Processor *processor) {
-    /* YOUR CODE HERE */
+    processor->R[instruction.ujtype.rd] =
+    processor->PC + 4;
+    processor->PC += processor->R[instruction.ujtype.imm];
 }
 
 void execute_lui(Instruction instruction, Processor *processor) {
