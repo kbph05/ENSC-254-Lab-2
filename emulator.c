@@ -370,13 +370,11 @@ void execute_branch(Instruction instruction, Processor *processor) {
             (processor->PC += (sWord)processor->R[(instruction.sbtype.imm5 | (instruction.sbtype.imm7 << 5))]) : 0;
             break;
 
-
         case 0x1:
             // bne
             ((sWord)processor->R[instruction.sbtype.rs1] != (sWord)processor->R[instruction.sbtype.rs2])? 
             (processor->PC += (sWord)processor->R[(instruction.sbtype.imm5 | (instruction.sbtype.imm7 << 5))]) : 0;
             break;
-
 
         case 0x4:
             //blt
@@ -409,11 +407,28 @@ void execute_branch(Instruction instruction, Processor *processor) {
 }
 
 void execute_load(Instruction instruction, Processor *processor, Byte *memory) {
+    /* YOUR CODE HERE */
     switch (instruction.itype.funct3) {
         case 0x0:
             // lb
-            processor->R[instruction.itype.rd] =
-
+            processor->R[instruction.itype.rd] = load(memory[(instruction.itype.rs1 +instruction.itype.imm)], 0x0, LENGTH_BYTE);
+            break;
+        case 0x1:
+            // lh
+            processor->R[instruction.itype.rd] = load(memory[(instruction.itype.rs1 +instruction.itype.imm)], 0x0, LENGTH_HALF_WORD);
+            break;
+        case 0x2:
+            // lw
+            processor->R[instruction.itype.rd] = load(memory[(instruction.itype.rs1 +instruction.itype.imm)], 0x0, LENGTH_WORD);
+            break;
+        case 0x4:
+            // lbu
+            processor->R[instruction.itype.rd] = load(memory[(instruction.itype.rs1 +instruction.itype.imm)], 0x0, LENGTH_BYTE);
+            break;
+        case 0x5:
+            // lhu
+            processor->R[instruction.itype.rd] = load(memory[(instruction.itype.rs1 +instruction.itype.imm)], 0x0, LENGTH_HALF_WORD);
+            break;
         default:
             handle_invalid_instruction(instruction);
             break;
@@ -431,8 +446,7 @@ void execute_store(Instruction instruction, Processor *processor, Byte *memory) 
 }
 
 void execute_jal(Instruction instruction, Processor *processor) {
-    processor->R[instruction.ujtype.rd] =
-    processor->PC + 4;
+    processor->R[instruction.ujtype.rd] = processor->PC + 4;
     processor->PC += processor->R[instruction.ujtype.imm];
 }
 
