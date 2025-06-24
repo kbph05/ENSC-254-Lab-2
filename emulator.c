@@ -411,15 +411,15 @@ void execute_load(Instruction instruction, Processor *processor, Byte *memory) {
     switch (instruction.itype.funct3) {
         case 0x0:
             // lb
-            processor->R[instruction.itype.rd] = load(memory[(instruction.itype.rs1 +instruction.itype.imm)], 0x0, LENGTH_BYTE);
+            processor->R[instruction.itype.rd] = load(memory, (instruction.itype.rs1 +instruction.itype.imm), LENGTH_BYTE);
             break;
         case 0x1:
             // lh
-            processor->R[instruction.itype.rd] = load(memory[(instruction.itype.rs1 +instruction.itype.imm)], 0x0, LENGTH_HALF_WORD);
+            processor->R[instruction.itype.rd] = load(memory, (instruction.itype.rs1 +instruction.itype.imm), LENGTH_HALF_WORD);
             break;
         case 0x2:
             // lw
-            processor->R[instruction.itype.rd] = load(memory[(instruction.itype.rs1 +instruction.itype.imm)], 0x0, LENGTH_WORD);
+            processor->R[instruction.itype.rd] = load(memory, (instruction.itype.rs1 +instruction.itype.imm), LENGTH_WORD);
             break;
         case 0x4:
             // lbu
