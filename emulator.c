@@ -364,7 +364,43 @@ void execute_ecall(Processor *p, Byte *memory) {
 
 void execute_branch(Instruction instruction, Processor *processor) {
     switch (instruction.sbtype.funct3) {
-        /* YOUR CODE HERE */
+        case 0x0:
+            // beq
+            ((sWord)processor->R[instruction.sbtype.rs1] == (sWord)processor->R[instruction.sbtype.rs2])? 
+            (processor->PC += (sWord)processor->R[(instruction.sbtype.imm5 | (instruction.sbtype.imm7 << 5))]) : 0;
+            break;
+
+
+        case 0x1:
+            // bne
+            ((sWord)processor->R[instruction.sbtype.rs1] != (sWord)processor->R[instruction.sbtype.rs2])? 
+            (processor->PC += (sWord)processor->R[(instruction.sbtype.imm5 | (instruction.sbtype.imm7 << 5))]) : 0;
+            break;
+
+
+        case 0x4:
+            //blt
+            ((sWord)processor->R[instruction.sbtype.rs1] < (sWord)processor->R[instruction.sbtype.rs2])? 
+            (processor->PC += (sWord)processor->R[(instruction.sbtype.imm5 | (instruction.sbtype.imm7 << 5))]) : 0;
+            break;
+
+        case 0x5:
+            // bge
+            ((sWord)processor->R[instruction.sbtype.rs1] >= (sWord)processor->R[instruction.sbtype.rs2])? 
+            (processor->PC += (sWord)processor->R[(instruction.sbtype.imm5 | (instruction.sbtype.imm7 << 5))]) : 0;
+            break;
+
+        case 0x6:
+            // bltu
+            ((Word)processor->R[instruction.sbtype.rs1] < (Word)processor->R[instruction.sbtype.rs2])? 
+            (processor->PC += (sWord)processor->R[(instruction.sbtype.imm5 | (instruction.sbtype.imm7 << 5))]) : 0;
+            break;
+
+        case 0x7:
+            // bgeu
+            ((Word)processor->R[instruction.sbtype.rs1] >= (Word)processor->R[instruction.sbtype.rs2])? 
+            (processor->PC += (sWord)processor->R[(instruction.sbtype.imm5 | (instruction.sbtype.imm7 << 5))]) : 0;
+            break;
         default:
             handle_invalid_instruction(instruction);
             exit(-1);
@@ -374,7 +410,8 @@ void execute_branch(Instruction instruction, Processor *processor) {
 
 void execute_load(Instruction instruction, Processor *processor, Byte *memory) {
     switch (instruction.itype.funct3) {
-        /* YOUR CODE HERE */
+        case 0x0:
+
         default:
             handle_invalid_instruction(instruction);
             break;
