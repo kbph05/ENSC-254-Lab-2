@@ -243,23 +243,23 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
         case 0x0:
             // addi
             processor->R[instruction.itype.rd] =
-            (sWord)processor->R[instruction.itype.rs1] +
-            (sWord)processor->R[instruction.itype.imm];
+            ((sWord)processor->R[instruction.itype.rs1] +
+            (sWord)instruction.itype.imm);
             break;
         case 0x1:
-           // switch ((instruction.itype.imm >> 5)) {
-                //case 0x0:
+           switch ((instruction.itype.imm >> 5) & (0x1F)) {
+                case 0x0:
                     // slli
                     processor->R[instruction.itype.rd] =
                     ((Word)processor->R[instruction.itype.rs1] << 
                     ((Word)instruction.itype.imm & 0xF));
                     break;
-                // default:
-                //     handle_invalid_instruction(instruction);
-                //     exit(-1);
-                //     break;
-            //}
-            //break;
+                default:
+                    handle_invalid_instruction(instruction);
+                    exit(-1);
+                    break;
+            }
+            break;
         case 0x2:
             //slti
             processor->R[instruction.itype.rd] =
@@ -279,7 +279,7 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
             (Word)instruction.itype.imm);
             break;
         case 0x5:
-            switch (instruction.itype.imm >> 5) {
+            switch ((instruction.itype.imm >> 5) & (0x1F)) {
                 case 0x0:
                     // srli
                     processor->R[instruction.itype.rd] =
@@ -445,12 +445,12 @@ void execute_store(Instruction instruction, Processor *processor, Byte *memory) 
 
 void execute_jal(Instruction instruction, Processor *processor) {
     processor->R[instruction.ujtype.rd] = processor->PC + 4;
-    processor->PC += processor->R[instruction.ujtype.imm];
+    processor->PC += instruction.ujtype.imm;
 }
 
 void execute_lui(Instruction instruction, Processor *processor) {
     processor->R[instruction.utype.rd] =
-    (sWord)processor->R[instruction.utype.imm] << 12;
+    (sWord)(instruction.utype.imm) << 12;
 }
 
 void store(Byte *memory, Address address, Alignment alignment, Word value) {
