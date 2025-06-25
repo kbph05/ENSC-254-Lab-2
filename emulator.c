@@ -247,19 +247,33 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
             (sWord)instruction.itype.imm);
             break;
         case 0x1:
+<<<<<<< HEAD
            switch ((instruction.itype.imm >> 5) & (0x1F)) {
                 case 0x0:
+=======
+           // switch ((instruction.itype.imm >> 5)) {
+                //case 0x0:
+>>>>>>> refs/remotes/origin/main
                     // slli
                     processor->R[instruction.itype.rd] =
                     ((Word)processor->R[instruction.itype.rs1] << 
                     ((Word)instruction.itype.imm & 0xF));
                     break;
+<<<<<<< HEAD
                 default:
                     handle_invalid_instruction(instruction);
                     exit(-1);
                     break;
             }
             break;
+=======
+                // default:
+                //     handle_invalid_instruction(instruction);
+                //     exit(-1);
+                //     break;
+            //}
+            //break;
+>>>>>>> refs/remotes/origin/main
         case 0x2:
             //slti
             processor->R[instruction.itype.rd] =
