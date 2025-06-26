@@ -79,13 +79,13 @@ void execute_rtype(Instruction instruction, Processor *processor) {
         case 0x1:
             switch (instruction.rtype.funct7) {
                 case 0x00:
-                    // sll -- check this
+                    // sll - shift bits of rs1 by an amount rs2 and then storing it in rd
                     processor->R[instruction.rtype.rd] =
                     ((sWord)processor->R[instruction.rtype.rs1]) << 
-                    ((sWord)processor->R[instruction.rtype.rs2]);
+                    ((sWord)processor->R[instruction.rtype.rs2]); // accessing registers for r-type rs1 and rs2
                     break;
                 case 0x1:
-                    // mulh -- double check this
+                    // mulh - multiply rs1 by rs2, and then shift by 32 bits to the right to store the highest 32 bits of the value. All of these values are signed Word or Double
                     processor->R[instruction.rtype.rd] =
                     (sWord)(((sDouble)processor->R[instruction.rtype.rs1]) *
                     ((sDouble)processor->R[instruction.rtype.rs2]) >> 32);
@@ -99,13 +99,13 @@ void execute_rtype(Instruction instruction, Processor *processor) {
         case 0x2:
             switch (instruction.rtype.funct7) {
                 case 0x01:
-                    //mulsu
+                    //mulsu - multiply rs1 by rs2, and then shift by 32 bits to the right to store the highest 32 bits of the value. rs1 is a signed word or signed double, and rs2 is an unsigned double
                     processor->R[instruction.rtype.rd] =
                     (sWord)(((sDouble)processor->R[instruction.rtype.rs1]) *
                     ((Double)processor->R[instruction.rtype.rs2]) >> 32);
                     break;
                 case 0x00:
-                    //slt
+                    //slt - set rd to be 1 if the value of rs1 is less than rs2, otherwise 0
                     processor->R[instruction.rtype.rd]=
                     ((sWord)processor->R[instruction.rtype.rs1] < 
                     (sWord)processor->R[instruction.rtype.rs2]) ? 1 : 0;
@@ -120,14 +120,14 @@ void execute_rtype(Instruction instruction, Processor *processor) {
         case 0x3:
             switch (instruction.rtype.funct7) {
                 case 0x00:
-                    // sltu
+                    // sltu - same as slt, but the values are unsigned
                     processor->R[instruction.rtype.rd]=
                     ((Word)processor->R[instruction.rtype.rs1] < 
                     (Word)processor->R[instruction.rtype.rs2]) ? 1 : 0;
                     break;
 
                 case 0x01:
-                    // mulu
+                    // mulu - multiply rs1 by rs2, and then shift by 32 bits to the right to store the highest 32 bits of the value. rs1 is a unsigned double or signed word, and rs2 is an unsigned double
                     processor->R[instruction.rtype.rd] =
                     (sWord)(((Double)processor->R[instruction.rtype.rs1]) *
                     ((Double)processor->R[instruction.rtype.rs2]) >> 32);
@@ -142,13 +142,13 @@ void execute_rtype(Instruction instruction, Processor *processor) {
         case 0x4:
             switch (instruction.rtype.funct7) {
                 case 0x0:
-                // Xor
+                // Xor - finding the exclusive OR for rs1 and rs2. Both of these values are signed
                 processor->R[instruction.rtype.rd] =
                     ((sWord)processor->R[instruction.rtype.rs1]) ^
                     ((sWord)processor->R[instruction.rtype.rs2]);
                 break;
                 case 0x01:
-                // Div
+                // Div - dividing rs1 (signed) by rs2 (signed)
                 processor->R[instruction.rtype.rd] = 
                     ((sWord)processor->R[instruction.rtype.rs1]) /
                     ((sWord)processor->R[instruction.rtype.rs2]);
@@ -163,22 +163,22 @@ void execute_rtype(Instruction instruction, Processor *processor) {
         case 0x5:
             switch (instruction.rtype.funct7) {
                 case 0x00:
-                    //srl
+                    //srl - shift rs1 bits right by an amount of rs2. rs1 is signed but rs2 is unsigned because the msb does not extend. Only zeros can extend
                     processor->R[instruction.rtype.rd] =
                     (((sWord)processor->R[instruction.rtype.rs1]) >>
                     ((Word)processor->R[instruction.rtype.rs2]));
                     break;
                 case 0x01:
-                    // divu
+                    // divu - same as div, only now rs1 and rs2 are unsigned numbers
                     processor->R[instruction.rtype.rd] =
                     (Word)processor->R[instruction.rtype.rs1] /
                     (Word)processor->R[instruction.rtype.rs2];
 
                     break;
                 case 0x20:
-                    // sra
+                    // sra - shift the bits right by an amount of rs2, but rs1 and rs2 are signed, so the msb does extend
                     processor->R[instruction.rtype.rd] =
-                    ((sWord)processor->R[instruction.rtype.rs1]) <<
+                    ((sWord)processor->R[instruction.rtype.rs1]) >>
                     ((sWord)processor->R[instruction.rtype.rs2]);
                     break;
                 default:
@@ -191,13 +191,13 @@ void execute_rtype(Instruction instruction, Processor *processor) {
         case 0x6:
             switch (instruction.rtype.funct7) {
                 case 0x00:
-                    //or
+                    // or - finds the OR operation with rs1 (unsigned) and rs2 (unsigned)
                     processor->R[instruction.rtype.rd] =
                     (Word)processor->R[instruction.rtype.rs1] |
                     (Word)processor->R[instruction.rtype.rs2];
                     break;
                 case 0x01:
-                    // rem
+                    // rem - returns the remainder (or modulus) of rs1 divided by rs2. Both of these values are signed
                     processor->R[instruction.rtype.rd] =
                     (sWord)processor->R[instruction.rtype.rs1] %
                     (sWord)processor->R[instruction.rtype.rs2];
@@ -212,13 +212,13 @@ void execute_rtype(Instruction instruction, Processor *processor) {
         case 0x7:
             switch (instruction.rtype.funct7) {
                 case 0x00:
-                    // and
+                    // and - finds the AND operation ofr rs1 (unsigned) and rs2 (unsigned)
                     processor->R[instruction.rtype.rd] =
                     (Word)processor->R[instruction.rtype.rs1] &
                     (Word)processor->R[instruction.rtype.rs2];
                     break;
                 case 0x01:
-                    //remu
+                    // remu - returns the remainder (or modulus) of rs1 divided by rs2. Both of these values are unsigned
                     processor->R[instruction.rtype.rd] =
                     (Word)processor->R[instruction.rtype.rs1] %
                     (Word)processor->R[instruction.rtype.rs2];
