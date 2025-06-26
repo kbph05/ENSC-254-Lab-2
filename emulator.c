@@ -241,7 +241,7 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
 
     switch (instruction.itype.funct3) {
         case 0x0:
-            // addi - adds values from rs1 and a signed immediate (constant) value. The immediate is sign extended so that  
+            // addi - ADD IMMEDIATE - adds values from rs1 and a signed immediate (constant) value. The immediate is sign extended so that
             processor->R[instruction.itype.rd] =
             ((sWord)processor->R[instruction.itype.rs1] +
             (sWord)sign_extend_number(instruction.itype.imm, 12));
@@ -250,7 +250,7 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
 
            switch ((instruction.itype.imm >> 5) & (0x7F)) {
                 case 0x0:
-                    // slli
+                    // slli - SHIFT LOGICAL LEFT IMMEDIATE
                     processor->R[instruction.itype.rd] =
                     ((Word)processor->R[instruction.itype.rs1] << 
                     ((Word)instruction.itype.imm & 0x1F));
@@ -263,21 +263,21 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
             break;
 
         case 0x2:
-            //slti
+            // slti - SET LESS THAN IMMEDIATE
             processor->R[instruction.itype.rd] =
             (((sWord)processor->R[instruction.itype.rs1] <
             (sWord)sign_extend_number(instruction.itype.imm, 12)? 1 : 0));
             break;
 
         case 0x3:
-            // sltiu
+            // sltiu - SET LESS THAN IMMEDIATE UNSIGNED
             processor->R[instruction.itype.rd] =
             (((Word)processor->R[instruction.itype.rs1] <
             (Word)instruction.itype.imm)? 1 : 0);
             break;
 
         case 0x4:
-            //xori
+            // xori - EXCLUSIVE OR IMMEDIATE
             processor->R[instruction.itype.rd] =
             ((Word)processor->R[instruction.itype.rs1] ^
             (Word)sign_extend_number(instruction.itype.imm, 12));
@@ -288,13 +288,13 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
 
             switch ((instruction.itype.imm >> 5) & (0x7F)) {
                 case 0x0:
-                    // srli
+                    // srli - SHIFT RIGHT LOGICAL IMMEDIATE
                     processor->R[instruction.itype.rd] =
                     ((Word)processor->R[instruction.itype.rs1] >>
                     ((Word)instruction.itype.imm & 0x1F));
                     break;
                 case 0x20:
-                    // srai
+                    // srai - SHIFT RIGHT ARITHMETRIC IMMEDIATE
                     processor->R[instruction.itype.rd] =
                     ((sWord)processor->R[instruction.itype.rs1] >>
                     instruction.itype.imm);
@@ -309,13 +309,13 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
 
 
         case 0x6:
-            //ori
+            // ori - OR IMMEDIATE
             processor->R[instruction.itype.rd] =
             ((Word)processor->R[instruction.itype.rs1] |
             (Word)sign_extend_number(instruction.itype.imm, 12));
             break;
         case 0x7:
-            // andi
+            // andi - AND IMMEDIATE
             processor->R[instruction.itype.rd] =
             ((Word)processor->R[instruction.itype.rs1] &
             (Word)sign_extend_number(instruction.itype.imm, 12));
@@ -360,7 +360,7 @@ void execute_ecall(Processor *p, Byte *memory) {
 void execute_branch(Instruction instruction, Processor *processor) {
     switch (instruction.sbtype.funct3) {
         case 0x0:
-            // beq
+            // beq - BRANCH IF EQUALS
             if ((sWord)processor->R[instruction.sbtype.rs1] == (sWord)processor->R[instruction.sbtype.rs2]) {
                 processor->PC += get_branch_offset(instruction);
             } else {
@@ -370,7 +370,7 @@ void execute_branch(Instruction instruction, Processor *processor) {
             break;
 
         case 0x1:
-            // bne
+            // bne - BRANCH IF NOT EQUALS
             if ((sWord)processor->R[instruction.sbtype.rs1] != (sWord)processor->R[instruction.sbtype.rs2]) {
                 processor->PC += get_branch_offset(instruction);
             } else {
@@ -379,25 +379,25 @@ void execute_branch(Instruction instruction, Processor *processor) {
             break;
 
         case 0x4:
-            // blt
+            // blt - BRANCH IF LESS THAN
             ((sWord)processor->R[instruction.sbtype.rs1] < (sWord)processor->R[instruction.sbtype.rs2])? 
             (processor->PC += get_branch_offset(instruction)) : (processor->PC +=4);
             break;
 
         case 0x5:
-            // bge
+            // bge - BRANCH IF GREATER OR EQUAL
             ((sWord)processor->R[instruction.sbtype.rs1] >= (sWord)processor->R[instruction.sbtype.rs2])? 
             (processor->PC += get_branch_offset(instruction)) : (processor->PC +=4);
             break;
 
         case 0x6:
-            // bltu
+            // bltu - BRANCH IF LESS THAN UNSIGNED
             ((Word)processor->R[instruction.sbtype.rs1] < (Word)processor->R[instruction.sbtype.rs2])? 
             (processor->PC += get_branch_offset(instruction)) : (processor->PC +=4);
             break;
 
         case 0x7:
-            // bgeu
+            // bgeu - BRANCH IF GREATER OR EQUAL UNSIGNED
             ((Word)processor->R[instruction.sbtype.rs1] >= (Word)processor->R[instruction.sbtype.rs2])? 
             (processor->PC += get_branch_offset(instruction)) : (processor->PC +=4);
             break;
@@ -455,22 +455,20 @@ void execute_load(Instruction instruction, Processor *processor, Byte *memory) {
 void execute_store(Instruction instruction, Processor *processor, Byte *memory) {
     switch (instruction.stype.funct3) {
         case 0x0:
-            //sb 
+            // sb - STORE BYTE - stores a byte sized value rs2 into memory at address = rs1 + imm
             store(memory, processor->R[instruction.stype.rs1] + 
             get_store_offset(instruction), LENGTH_BYTE, processor->R[instruction.stype.rs2]); // dont forget to store the value of rs2 not the actual address of rs2
             break;
-
         case 0x1:
-            // sh
+            // sh - STORE HALF WORD - stores a half word size (2 bytes) into memory at address = rs1 + imm
             store(memory, processor->R[instruction.stype.rs1] + 
             get_store_offset(instruction), LENGTH_HALF_WORD, processor->R[instruction.stype.rs2]);
             break;
         case 0x2:
-            // sw
+            // sw - STORE WORD - stores a full word size (4 bytes) into memory at address = rs1 + imm
             store(memory, processor->R[instruction.stype.rs1] + 
             get_store_offset(instruction), LENGTH_WORD, processor->R[instruction.stype.rs2]);
             break;
-        
         default:
             handle_invalid_instruction(instruction);
             exit(-1);
@@ -488,9 +486,8 @@ void execute_jal(Instruction instruction, Processor *processor) {
 }
 
 void execute_lui(Instruction instruction, Processor *processor) {
-    // 
+    // lui - LOAD UPPER IMM - loads imm into rd by converting imm into a signed byte and by shifting imm left by 12 bits  
     processor->R[instruction.utype.rd] = (sWord)(instruction.utype.imm) << 12;
-
     // update PC
     processor->PC += 4;
 }
@@ -498,7 +495,7 @@ void execute_lui(Instruction instruction, Processor *processor) {
 void store(Byte *memory, Address address, Alignment alignment, Word value) {
     /* YOUR CODE HERE */ 
     // reference the load function here. muust include 3 cases: LENGTH BYTE, LENGTH HALF WORD, LENGTH WORD
-    // address is a 32 bit address in memory
+    // address is a 32 bit index in memory, memory (RAM) is a stack/array that contains stored words
     switch(alignment) {
         case LENGTH_BYTE:
             memory[address] = value & 0xFF; // store 1 byte of the value of the word by masking the first 8 bits of value
