@@ -79,13 +79,13 @@ void execute_rtype(Instruction instruction, Processor *processor) {
         case 0x1:
             switch (instruction.rtype.funct7) {
                 case 0x00:
-                    // sll -- check this
+                    // sll - shift bits of rs1 by an amount rs2 and then storing it in rd
                     processor->R[instruction.rtype.rd] =
                     ((sWord)processor->R[instruction.rtype.rs1]) << 
-                    ((sWord)processor->R[instruction.rtype.rs2]);
+                    ((sWord)processor->R[instruction.rtype.rs2]); // accessing registers for r-type rs1 and rs2
                     break;
                 case 0x1:
-                    // mulh -- double check this
+                    // mulh - multiply rs1 by rs2, and then shift by 32 bits to the right to store the highest 32 bits of the value. All of these values are signed Word or Double
                     processor->R[instruction.rtype.rd] =
                     (sWord)(((sDouble)processor->R[instruction.rtype.rs1]) *
                     ((sDouble)processor->R[instruction.rtype.rs2]) >> 32);
@@ -99,13 +99,13 @@ void execute_rtype(Instruction instruction, Processor *processor) {
         case 0x2:
             switch (instruction.rtype.funct7) {
                 case 0x01:
-                    //mulsu
+                    //mulsu - multiply rs1 by rs2, and then shift by 32 bits to the right to store the highest 32 bits of the value. rs1 is a signed word or signed double, and rs2 is an unsigned double
                     processor->R[instruction.rtype.rd] =
                     (sWord)(((sDouble)processor->R[instruction.rtype.rs1]) *
                     ((Double)processor->R[instruction.rtype.rs2]) >> 32);
                     break;
                 case 0x00:
-                    //slt
+                    //slt - set rd to be 1 if the value of rs1 is less than rs2, otherwise 0
                     processor->R[instruction.rtype.rd]=
                     ((sWord)processor->R[instruction.rtype.rs1] < 
                     (sWord)processor->R[instruction.rtype.rs2]) ? 1 : 0;
@@ -120,14 +120,14 @@ void execute_rtype(Instruction instruction, Processor *processor) {
         case 0x3:
             switch (instruction.rtype.funct7) {
                 case 0x00:
-                    // sltu
+                    // sltu - same as slt, but the values are unsigned
                     processor->R[instruction.rtype.rd]=
                     ((Word)processor->R[instruction.rtype.rs1] < 
                     (Word)processor->R[instruction.rtype.rs2]) ? 1 : 0;
                     break;
 
                 case 0x01:
-                    // mulu
+                    // mulu - multiply rs1 by rs2, and then shift by 32 bits to the right to store the highest 32 bits of the value. rs1 is a unsigned double or signed word, and rs2 is an unsigned double
                     processor->R[instruction.rtype.rd] =
                     (sWord)(((Double)processor->R[instruction.rtype.rs1]) *
                     ((Double)processor->R[instruction.rtype.rs2]) >> 32);
@@ -142,17 +142,17 @@ void execute_rtype(Instruction instruction, Processor *processor) {
         case 0x4:
             switch (instruction.rtype.funct7) {
                 case 0x0:
-                // Xor
+                // Xor - finding the exclusive OR for rs1 and rs2. Both of these values are signed
                 processor->R[instruction.rtype.rd] =
                     ((sWord)processor->R[instruction.rtype.rs1]) ^
                     ((sWord)processor->R[instruction.rtype.rs2]);
                 break;
                 case 0x01:
-                // Div
+                // Div - dividing rs1 (signed) by rs2 (signed)
                 processor->R[instruction.rtype.rd] = 
                     ((sWord)processor->R[instruction.rtype.rs1]) /
                     ((sWord)processor->R[instruction.rtype.rs2]);
-
+                    break;
                 default:
                     handle_invalid_instruction(instruction);
                     exit(-1);
@@ -163,22 +163,22 @@ void execute_rtype(Instruction instruction, Processor *processor) {
         case 0x5:
             switch (instruction.rtype.funct7) {
                 case 0x00:
-                    //srl
+                    //srl - shift rs1 bits right by an amount of rs2. rs1 is signed but rs2 is unsigned because the msb does not extend. Only zeros can extend
                     processor->R[instruction.rtype.rd] =
                     (((sWord)processor->R[instruction.rtype.rs1]) >>
                     ((Word)processor->R[instruction.rtype.rs2]));
                     break;
                 case 0x01:
-                    // divu
+                    // divu - same as div, only now rs1 and rs2 are unsigned numbers
                     processor->R[instruction.rtype.rd] =
                     (Word)processor->R[instruction.rtype.rs1] /
                     (Word)processor->R[instruction.rtype.rs2];
 
                     break;
                 case 0x20:
-                    // sra
+                    // sra - shift the bits right by an amount of rs2, but rs1 and rs2 are signed, so the msb does extend
                     processor->R[instruction.rtype.rd] =
-                    ((sWord)processor->R[instruction.rtype.rs1]) <<
+                    ((sWord)processor->R[instruction.rtype.rs1]) >>
                     ((sWord)processor->R[instruction.rtype.rs2]);
                     break;
                 default:
@@ -191,13 +191,13 @@ void execute_rtype(Instruction instruction, Processor *processor) {
         case 0x6:
             switch (instruction.rtype.funct7) {
                 case 0x00:
-                    //or
+                    // or - finds the OR operation with rs1 (unsigned) and rs2 (unsigned)
                     processor->R[instruction.rtype.rd] =
                     (Word)processor->R[instruction.rtype.rs1] |
                     (Word)processor->R[instruction.rtype.rs2];
                     break;
                 case 0x01:
-                    // rem
+                    // rem - returns the remainder (or modulus) of rs1 divided by rs2. Both of these values are signed
                     processor->R[instruction.rtype.rd] =
                     (sWord)processor->R[instruction.rtype.rs1] %
                     (sWord)processor->R[instruction.rtype.rs2];
@@ -212,13 +212,13 @@ void execute_rtype(Instruction instruction, Processor *processor) {
         case 0x7:
             switch (instruction.rtype.funct7) {
                 case 0x00:
-                    // and
+                    // and - finds the AND operation ofr rs1 (unsigned) and rs2 (unsigned)
                     processor->R[instruction.rtype.rd] =
                     (Word)processor->R[instruction.rtype.rs1] &
                     (Word)processor->R[instruction.rtype.rs2];
                     break;
                 case 0x01:
-                    //remu
+                    // remu - returns the remainder (or modulus) of rs1 divided by rs2. Both of these values are unsigned
                     processor->R[instruction.rtype.rd] =
                     (Word)processor->R[instruction.rtype.rs1] %
                     (Word)processor->R[instruction.rtype.rs2];
@@ -241,18 +241,19 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
 
     switch (instruction.itype.funct3) {
         case 0x0:
-            // addi
+            // addi - ADD IMMEDIATE - adds values from rs1 and a signed immediate (constant) value. The immediate is sign extended so that it is 32 bits long and preserves the sign
             processor->R[instruction.itype.rd] =
             ((sWord)processor->R[instruction.itype.rs1] +
-            (sWord)instruction.itype.imm);
+            (sWord)sign_extend_number(instruction.itype.imm, 12));
             break;
         case 0x1:
-           switch ((instruction.itype.imm >> 5) & (0x1F)) {
+
+           switch ((instruction.itype.imm >> 5) & (0x7F)) {
                 case 0x0:
-                    // slli
+                    // slli - SHIFT LOGICAL LEFT IMMEDIATE - shifts rs1 (unsigned) left by an amount unsigned immediate (constant) value
                     processor->R[instruction.itype.rd] =
                     ((Word)processor->R[instruction.itype.rs1] << 
-                    ((Word)instruction.itype.imm & 0xF));
+                    ((Word)instruction.itype.imm & 0x1F));
                     break;
                 default:
                     handle_invalid_instruction(instruction);
@@ -260,60 +261,70 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
                     break;
             }
             break;
+
         case 0x2:
-            //slti
+            // slti - SET LESS THAN IMMEDIATE - sets rd to 1 if rs1 (signed) is less than signed immediate (constant) value, otherwise 0. The immediate is sign extended so that it is 32 bits long and preserves the sign
             processor->R[instruction.itype.rd] =
             (((sWord)processor->R[instruction.itype.rs1] <
-            (sWord)instruction.itype.imm)? 1 : 0);
+            (sWord)sign_extend_number(instruction.itype.imm, 12)? 1 : 0));
             break;
+
         case 0x3:
-            // sltiu
+            // sltiu - SET LESS THAN IMMEDIATE UNSIGNED -  sets rd to 1 if rs1 (unsigned) is less than unsigned immediate (constant) value
             processor->R[instruction.itype.rd] =
             (((Word)processor->R[instruction.itype.rs1] <
             (Word)instruction.itype.imm)? 1 : 0);
             break;
+
         case 0x4:
-            //xori
+            // xori - EXCLUSIVE OR IMMEDIATE - takes the exclusive or of unsigned rs1 and an immediate value
             processor->R[instruction.itype.rd] =
             ((Word)processor->R[instruction.itype.rs1] ^
-            (Word)instruction.itype.imm);
+            (Word)sign_extend_number(instruction.itype.imm, 12));
             break;
+
         case 0x5:
-            switch ((instruction.itype.imm >> 5) & (0x1F)) {
+
+
+            switch ((instruction.itype.imm >> 5) & (0x7F)) {
                 case 0x0:
-                    // srli
+                    // srli - SHIFT RIGHT LOGICAL IMMEDIATE - shifts rs1 (unsigned) right logically by an amount unsigned immediate (constant) value (where imm is the first 5 bits of imm)
                     processor->R[instruction.itype.rd] =
                     ((Word)processor->R[instruction.itype.rs1] >>
-                    ((sWord)instruction.itype.imm & 0x1F));
+                    ((Word)instruction.itype.imm & 0x1F));
                     break;
                 case 0x20:
-                    // srai
+                    // srai - SHIFT RIGHT ARITHMETRIC IMMEDIATE - shifts rs1 (signed) right logically by an amount signed immediate (constant) value
                     processor->R[instruction.itype.rd] =
                     ((sWord)processor->R[instruction.itype.rs1] >>
-                    (sWord)instruction.itype.imm & 0x1F);
+                    instruction.itype.imm);
                     break;
+
                 default:
                     handle_invalid_instruction(instruction);
                     exit(-1);
                     break;
             }
             break;
+
+
         case 0x6:
-            //ori
+            // ori - OR IMMEDIATE
             processor->R[instruction.itype.rd] =
-            ((sWord)processor->R[instruction.itype.rs1] |
-            (sWord)instruction.itype.imm);
+            ((Word)processor->R[instruction.itype.rs1] |
+            (Word)sign_extend_number(instruction.itype.imm, 12));
             break;
         case 0x7:
-            // andi
+            // andi - AND IMMEDIATE
             processor->R[instruction.itype.rd] =
-            ((sWord)processor->R[instruction.itype.rs1] &
-            (sWord)instruction.itype.imm);
+            ((Word)processor->R[instruction.itype.rs1] &
+            (Word)sign_extend_number(instruction.itype.imm, 12));
             break;
         default:
             handle_invalid_instruction(instruction);
             break;
     }
+    // Update PC
     processor->PC += 4;
 }
 
@@ -350,40 +361,49 @@ void execute_ecall(Processor *p, Byte *memory) {
 void execute_branch(Instruction instruction, Processor *processor) {
     switch (instruction.sbtype.funct3) {
         case 0x0:
-            // beq
-            ((sWord)processor->R[instruction.sbtype.rs1] == (sWord)processor->R[instruction.sbtype.rs2])? 
-            (processor->PC += (sWord)processor->R[(instruction.sbtype.imm5 | (instruction.sbtype.imm7 << 5))]) : 0;
+            // beq - BRANCH IF EQUALS - if rs1 (signed) is equal to (signed) rs2, add the value of immediate to the PC, otherwise add 4 to PC
+            if ((sWord)processor->R[instruction.sbtype.rs1] == (sWord)processor->R[instruction.sbtype.rs2]) {
+                processor->PC += get_branch_offset(instruction);
+            } else {
+                processor->PC +=4;
+            }
+
             break;
 
         case 0x1:
-            // bne
-            ((sWord)processor->R[instruction.sbtype.rs1] != (sWord)processor->R[instruction.sbtype.rs2])? 
-            (processor->PC += (sWord)processor->R[(instruction.sbtype.imm5 | (instruction.sbtype.imm7 << 5))]) : 0;
+            // bne - BRANCH IF NOT EQUALS - if rs1 (signed) is not equal to (signed) rs2, add the value of immediate to the PC, otherwise add 4 to PC
+            if ((sWord)processor->R[instruction.sbtype.rs1] != (sWord)processor->R[instruction.sbtype.rs2]) {
+                processor->PC += get_branch_offset(instruction);
+            } else {
+                processor->PC +=4;
+            }
             break;
 
         case 0x4:
-            //blt
+            // blt - BRANCH IF LESS THAN - if rs1 (signed) is less than (signed) rs2, add the value of immediate to the PC, otherwise add 4 to PC
             ((sWord)processor->R[instruction.sbtype.rs1] < (sWord)processor->R[instruction.sbtype.rs2])? 
-            (processor->PC += (sWord)processor->R[(instruction.sbtype.imm5 | (instruction.sbtype.imm7 << 5))]) : 0;
+            (processor->PC += get_branch_offset(instruction)) : (processor->PC +=4);
             break;
 
         case 0x5:
-            // bge
+            // bge - BRANCH IF GREATER OR EQUAL - if rs1 (signed) is greater or equal to (signed) rs2, add the value of immediate to the PC, otherwise add 4 to PC
             ((sWord)processor->R[instruction.sbtype.rs1] >= (sWord)processor->R[instruction.sbtype.rs2])? 
-            (processor->PC += (sWord)processor->R[(instruction.sbtype.imm5 | (instruction.sbtype.imm7 << 5))]) : 0;
+            (processor->PC += get_branch_offset(instruction)) : (processor->PC +=4);
             break;
 
         case 0x6:
-            // bltu
+            // bltu - BRANCH IF LESS THAN UNSIGNED - if rs1 (unsigned) is less than (unsigned) rs2, add the value of immediate to the PC, otherwise add 4 to PC
             ((Word)processor->R[instruction.sbtype.rs1] < (Word)processor->R[instruction.sbtype.rs2])? 
-            (processor->PC += (sWord)processor->R[(instruction.sbtype.imm5 | (instruction.sbtype.imm7 << 5))]) : 0;
+            (processor->PC += get_branch_offset(instruction)) : (processor->PC +=4);
             break;
 
         case 0x7:
-            // bgeu
+            // bgeu - BRANCH IF GREATER OR EQUAL UNSIGNED - if rs1 (unsigned) is greater or equal to (unsigned) rs2, add the value of immediate to the PC, otherwise add 4 to PC
             ((Word)processor->R[instruction.sbtype.rs1] >= (Word)processor->R[instruction.sbtype.rs2])? 
-            (processor->PC += (sWord)processor->R[(instruction.sbtype.imm5 | (instruction.sbtype.imm7 << 5))]) : 0;
+            (processor->PC += get_branch_offset(instruction)) : (processor->PC +=4);
             break;
+
+            
         default:
             handle_invalid_instruction(instruction);
             exit(-1);
@@ -395,81 +415,101 @@ void execute_load(Instruction instruction, Processor *processor, Byte *memory) {
     /* YOUR CODE HERE */
     switch (instruction.itype.funct3) {
         case 0x0:
-            // lb
-            processor->R[instruction.itype.rd] = sign_extend_number(load(memory, (instruction.itype.rs1 + instruction.itype.imm), LENGTH_BYTE), LENGTH_BYTE);
+            // lb - LOAD BYTE - must sign extend after loading the value because it needs to be 32 bits long, and LENGTH_BYTE is just 8 bits long 
+            processor->R[instruction.itype.rd] = 
+            sign_extend_number(load(memory, processor->R[instruction.itype.rs1] + 
+            sign_extend_number(instruction.itype.imm, 12), LENGTH_BYTE), 8);
             break;
         case 0x1:
-            // lh
-            processor->R[instruction.itype.rd] = sign_extend_number(load(memory, (instruction.itype.rs1 + instruction.itype.imm), LENGTH_HALF_WORD),  LENGTH_HALF_WORD);
+            // lh - LOAD HALF BYTE - must also sign extend after loading since HALF_WORD is only 16 bits long
+            processor->R[instruction.itype.rd] = 
+            sign_extend_number(load(memory, processor->R[instruction.itype.rs1] + 
+            sign_extend_number(instruction.itype.imm, 12),  LENGTH_HALF_WORD), 16);
             break;
         case 0x2:
-            // lw
-            processor->R[instruction.itype.rd] = sign_extend_number(load(memory, (instruction.itype.rs1 + instruction.itype.imm), LENGTH_WORD),  LENGTH_WORD);
+            // lw - signed but no need to sign extend because a word length is 32 bits long
+            processor->R[instruction.itype.rd] = 
+            load(memory, processor->R[instruction.itype.rs1] + 
+            sign_extend_number(instruction.itype.imm, 12),  LENGTH_WORD);
             break; 
         case 0x4:
-            // lbu
-            processor->R[instruction.itype.rd] = sign_extend_number(load(memory, (instruction.itype.rs1 + instruction.itype.imm), LENGTH_BYTE), LENGTH_BYTE);
+            // lbu - LOAD BYTE UNSIGNED - unsigned, so no sign extension needed when setting rd
+            processor->R[instruction.itype.rd] = 
+            load(memory, processor->R[instruction.itype.rs1] + 
+            sign_extend_number(instruction.itype.imm, 12), LENGTH_BYTE);
             break;
         case 0x5:
-            // lhu
-            processor->R[instruction.itype.rd] = sign_extend_number(load(memory, (instruction.itype.rs1 + instruction.itype.imm), LENGTH_HALF_WORD), LENGTH_HALF_WORD);
+            // lhu - LOAD HALF WORD UNSIGNED - unsigned, so no sign extension needed when setting rd
+            processor->R[instruction.itype.rd] = 
+            load(memory, processor->R[instruction.itype.rs1] + 
+            sign_extend_number(instruction.itype.imm, 12), LENGTH_HALF_WORD);
             break;
         default:
             handle_invalid_instruction(instruction);
             break;
     }
+
+    // update PC
+    processor->PC += 4;
 }
 
 void execute_store(Instruction instruction, Processor *processor, Byte *memory) {
     switch (instruction.stype.funct3) {
         case 0x0:
-            //sb
-            store(memory, (instruction.stype.rs1 + ((instruction.stype.imm7 < 5)) | instruction.stype.imm5) & 0xFF, LENGTH_BYTE, instruction.stype.rs2);
+            // sb - STORE BYTE - stores a byte sized value rs2 into memory at address = rs1 + imm
+            store(memory, processor->R[instruction.stype.rs1] + 
+            get_store_offset(instruction), LENGTH_BYTE, processor->R[instruction.stype.rs2]); // dont forget to store the value of rs2 not the actual address of rs2
             break;
-
         case 0x1:
-            // sh
-            store(memory, (instruction.stype.rs1 + ((instruction.stype.imm7 < 5)) | instruction.stype.imm5) & 0xFFFF, LENGTH_HALF_WORD, instruction.stype.rs2);
+            // sh - STORE HALF WORD - stores a half word size (2 bytes) into memory at address = rs1 + imm
+            store(memory, processor->R[instruction.stype.rs1] + 
+            get_store_offset(instruction), LENGTH_HALF_WORD, processor->R[instruction.stype.rs2]);
             break;
         case 0x2:
-            // sw
-            store(memory, (instruction.stype.rs1 + ((instruction.stype.imm7 < 5)) | instruction.stype.imm5), LENGTH_WORD, instruction.stype.rs2);
+            // sw - STORE WORD - stores a full word size (4 bytes) into memory at address = rs1 + imm
+            store(memory, processor->R[instruction.stype.rs1] + 
+            get_store_offset(instruction), LENGTH_WORD, processor->R[instruction.stype.rs2]);
             break;
-        
         default:
             handle_invalid_instruction(instruction);
             exit(-1);
             break;
     }
+
+    // update PC
+    processor->PC += 4;
 }
 
 void execute_jal(Instruction instruction, Processor *processor) {
-    processor->R[instruction.ujtype.rd] = processor->PC + 4;
-    processor->PC += instruction.ujtype.imm;
+    // jal - JUMP AND LINK
+    processor->R[instruction.ujtype.rd] = (Word)(processor->PC + 4); // rd = PC + 4
+    processor->PC += (sWord)(sign_extend_number(get_jump_offset(instruction), 20)); // PC = PC + imm
 }
 
 void execute_lui(Instruction instruction, Processor *processor) {
-    processor->R[instruction.utype.rd] =
-    (sWord)(instruction.utype.imm) << 12;
+    // lui - LOAD UPPER IMM - loads imm into rd by converting imm into a signed byte and by shifting imm left by 12 bits  
+    processor->R[instruction.utype.rd] = (sWord)(instruction.utype.imm) << 12;
+    // update PC
+    processor->PC += 4;
 }
 
 void store(Byte *memory, Address address, Alignment alignment, Word value) {
     /* YOUR CODE HERE */ 
     // reference the load function here. muust include 3 cases: LENGTH BYTE, LENGTH HALF WORD, LENGTH WORD
-    // address is a 32 bit address in memory
+    // address is a 32 bit index in memory, memory (RAM) is a stack/array that contains stored words
     switch(alignment) {
         case LENGTH_BYTE:
             memory[address] = value & 0xFF; // store 1 byte of the value of the word by masking the first 8 bits of value
         break;
         case LENGTH_HALF_WORD:
-            memory[address] = value & 0xFF;
-            memory[address + 1] = (value >> 8) & 0xFF;
+            memory[address] = value & 0xFF; // storing 1 byte 
+            memory[address + 1] = (value >> 8) & 0xFF; // storing first byte
         break;
         case LENGTH_WORD:
-            memory[address] = value & 0xFF;
-            memory[address + 1] = (value >> 8) & 0xFF;
-            memory[address + 2] = (value >> 16) & 0xFF;
-            memory[address + 3] = (value >> 24) & 0xFF;
+            memory[address] = value & 0xFF; // storing 1 byte starting from msb
+            memory[address + 1] = (value >> 8) & 0xFF; // another byte after
+            memory[address + 2] = (value >> 16) & 0xFF; // another byte after
+            memory[address + 3] = (value >> 24) & 0xFF; // first byte in string
         break;
     }
 }
