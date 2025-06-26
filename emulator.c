@@ -241,7 +241,7 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
 
     switch (instruction.itype.funct3) {
         case 0x0:
-            // addi
+            // addi - adds values from rs1 and a signed immediate (constant) value. The immediate is sign extended so that  
             processor->R[instruction.itype.rd] =
             ((sWord)processor->R[instruction.itype.rs1] +
             (sWord)sign_extend_number(instruction.itype.imm, 12));
