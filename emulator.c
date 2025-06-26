@@ -152,7 +152,7 @@ void execute_rtype(Instruction instruction, Processor *processor) {
                 processor->R[instruction.rtype.rd] = 
                     ((sWord)processor->R[instruction.rtype.rs1]) /
                     ((sWord)processor->R[instruction.rtype.rs2]);
-
+                    break;
                 default:
                     handle_invalid_instruction(instruction);
                     exit(-1);
@@ -379,7 +379,7 @@ void execute_branch(Instruction instruction, Processor *processor) {
             break;
 
         case 0x4:
-            //blt
+            // blt
             ((sWord)processor->R[instruction.sbtype.rs1] < (sWord)processor->R[instruction.sbtype.rs2])? 
             (processor->PC += get_branch_offset(instruction)) : (processor->PC +=4);
             break;
@@ -414,24 +414,34 @@ void execute_load(Instruction instruction, Processor *processor, Byte *memory) {
     /* YOUR CODE HERE */
     switch (instruction.itype.funct3) {
         case 0x0:
-            // lb
-            processor->R[instruction.itype.rd] = load(memory, processor->R[instruction.itype.rs1] + sign_extend_number(instruction.itype.imm, 12), LENGTH_BYTE);
+            // lb - LOAD BYTE - must sign extend after loading the value because it needs to be 32 bits long, and LENGTH_BYTE is just 8 bits long 
+            processor->R[instruction.itype.rd] = 
+            sign_extend_number(load(memory, processor->R[instruction.itype.rs1] + 
+            sign_extend_number(instruction.itype.imm, 12), LENGTH_BYTE), 8);
             break;
         case 0x1:
-            // lh
-            processor->R[instruction.itype.rd] = load(memory, processor->R[instruction.itype.rs1] + sign_extend_number(instruction.itype.imm, 12),  LENGTH_HALF_WORD);
+            // lh - LOAD HALF BYTE - must also sign extend after loading since HALF_WORD is only 16 bits long
+            processor->R[instruction.itype.rd] = 
+            sign_extend_number(load(memory, processor->R[instruction.itype.rs1] + 
+            sign_extend_number(instruction.itype.imm, 12),  LENGTH_HALF_WORD), 16);
             break;
         case 0x2:
-            // lw
-            processor->R[instruction.itype.rd] = load(memory, processor->R[instruction.itype.rs1] + sign_extend_number(instruction.itype.imm, 12),  LENGTH_WORD);
+            // lw - signed but no need to sign extend because a word length is 32 bits long
+            processor->R[instruction.itype.rd] = 
+            load(memory, processor->R[instruction.itype.rs1] + 
+            sign_extend_number(instruction.itype.imm, 12),  LENGTH_WORD);
             break; 
         case 0x4:
-            // lbu
-            processor->R[instruction.itype.rd] = load(memory, processor->R[instruction.itype.rs1] + sign_extend_number(instruction.itype.imm, 12), LENGTH_BYTE);
+            // lbu - LOAD BYTE UNSIGNED - unsigned, so no sign extension needed when setting rd
+            processor->R[instruction.itype.rd] = 
+            load(memory, processor->R[instruction.itype.rs1] + 
+            sign_extend_number(instruction.itype.imm, 12), LENGTH_BYTE);
             break;
         case 0x5:
-            // lhu
-            processor->R[instruction.itype.rd] = load(memory, processor->R[instruction.itype.rs1] + sign_extend_number(instruction.itype.imm, 12), LENGTH_HALF_WORD);
+            // lhu - LOAD HALF WORD UNSIGNED - unsigned, so no sign extension needed when setting rd
+            processor->R[instruction.itype.rd] = 
+            load(memory, processor->R[instruction.itype.rs1] + 
+            sign_extend_number(instruction.itype.imm, 12), LENGTH_HALF_WORD);
             break;
         default:
             handle_invalid_instruction(instruction);
@@ -445,17 +455,20 @@ void execute_load(Instruction instruction, Processor *processor, Byte *memory) {
 void execute_store(Instruction instruction, Processor *processor, Byte *memory) {
     switch (instruction.stype.funct3) {
         case 0x0:
-            //sb
-            store(memory, processor->R[instruction.stype.rs1] + get_store_offset(instruction), LENGTH_BYTE, instruction.stype.rs2);
+            //sb 
+            store(memory, processor->R[instruction.stype.rs1] + 
+            get_store_offset(instruction), LENGTH_BYTE, processor->R[instruction.stype.rs2]); // dont forget to store the value of rs2 not the actual address of rs2
             break;
 
         case 0x1:
             // sh
-            store(memory, processor->R[instruction.stype.rs1] + get_store_offset(instruction), LENGTH_HALF_WORD, instruction.stype.rs2);
+            store(memory, processor->R[instruction.stype.rs1] + 
+            get_store_offset(instruction), LENGTH_HALF_WORD, processor->R[instruction.stype.rs2]);
             break;
         case 0x2:
             // sw
-            store(memory, processor->R[instruction.stype.rs1] + get_store_offset(instruction), LENGTH_WORD, processor->R[instruction.stype.rs2]);
+            store(memory, processor->R[instruction.stype.rs1] + 
+            get_store_offset(instruction), LENGTH_WORD, processor->R[instruction.stype.rs2]);
             break;
         
         default:
@@ -469,16 +482,14 @@ void execute_store(Instruction instruction, Processor *processor, Byte *memory) 
 }
 
 void execute_jal(Instruction instruction, Processor *processor) {
-
-    processor->R[instruction.ujtype.rd] = (Word)(processor->PC + 4);
-    processor->PC += (sWord)(sign_extend_number(get_jump_offset(instruction), 20));
-    
-    
+    // jal - JUMP AND LINK
+    processor->R[instruction.ujtype.rd] = (Word)(processor->PC + 4); // rd = PC + 4
+    processor->PC += (sWord)(sign_extend_number(get_jump_offset(instruction), 20)); // PC = PC + imm
 }
 
 void execute_lui(Instruction instruction, Processor *processor) {
-    processor->R[instruction.utype.rd] =
-    (sWord)(instruction.utype.imm) << 12;
+    // 
+    processor->R[instruction.utype.rd] = (sWord)(instruction.utype.imm) << 12;
 
     // update PC
     processor->PC += 4;
@@ -493,14 +504,14 @@ void store(Byte *memory, Address address, Alignment alignment, Word value) {
             memory[address] = value & 0xFF; // store 1 byte of the value of the word by masking the first 8 bits of value
         break;
         case LENGTH_HALF_WORD:
-            memory[address] = value & 0xFF;
-            memory[address + 1] = (value >> 8) & 0xFF;
+            memory[address] = value & 0xFF; // storing 1 byte 
+            memory[address + 1] = (value >> 8) & 0xFF; // storing first byte
         break;
         case LENGTH_WORD:
-            memory[address] = value & 0xFF;
-            memory[address + 1] = (value >> 8) & 0xFF;
-            memory[address + 2] = (value >> 16) & 0xFF;
-            memory[address + 3] = (value >> 24) & 0xFF;
+            memory[address] = value & 0xFF; // storing 1 byte starting from msb
+            memory[address + 1] = (value >> 8) & 0xFF; // another byte after
+            memory[address + 2] = (value >> 16) & 0xFF; // another byte after
+            memory[address + 3] = (value >> 24) & 0xFF; // first byte in string
         break;
     }
 }
