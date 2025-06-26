@@ -241,7 +241,7 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
 
     switch (instruction.itype.funct3) {
         case 0x0:
-            // addi - ADD IMMEDIATE - adds values from rs1 and a signed immediate (constant) value. The immediate is sign extended so that
+            // addi - ADD IMMEDIATE - adds values from rs1 and a signed immediate (constant) value. The immediate is sign extended so that it is 32 bits long and preserves the sign
             processor->R[instruction.itype.rd] =
             ((sWord)processor->R[instruction.itype.rs1] +
             (sWord)sign_extend_number(instruction.itype.imm, 12));
@@ -250,7 +250,7 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
 
            switch ((instruction.itype.imm >> 5) & (0x7F)) {
                 case 0x0:
-                    // slli - SHIFT LOGICAL LEFT IMMEDIATE
+                    // slli - SHIFT LOGICAL LEFT IMMEDIATE - shifts rs1 (unsigned) left by an amount unsigned immediate (constant) value
                     processor->R[instruction.itype.rd] =
                     ((Word)processor->R[instruction.itype.rs1] << 
                     ((Word)instruction.itype.imm & 0x1F));
@@ -263,21 +263,21 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
             break;
 
         case 0x2:
-            // slti - SET LESS THAN IMMEDIATE
+            // slti - SET LESS THAN IMMEDIATE - sets rd to 1 if rs1 (signed) is less than signed immediate (constant) value, otherwise 0. The immediate is sign extended so that it is 32 bits long and preserves the sign
             processor->R[instruction.itype.rd] =
             (((sWord)processor->R[instruction.itype.rs1] <
             (sWord)sign_extend_number(instruction.itype.imm, 12)? 1 : 0));
             break;
 
         case 0x3:
-            // sltiu - SET LESS THAN IMMEDIATE UNSIGNED
+            // sltiu - SET LESS THAN IMMEDIATE UNSIGNED -  sets rd to 1 if rs1 (unsigned) is less than unsigned immediate (constant) value
             processor->R[instruction.itype.rd] =
             (((Word)processor->R[instruction.itype.rs1] <
             (Word)instruction.itype.imm)? 1 : 0);
             break;
 
         case 0x4:
-            // xori - EXCLUSIVE OR IMMEDIATE
+            // xori - EXCLUSIVE OR IMMEDIATE - takes the exclusive or of unsigned rs1 and an immediate value
             processor->R[instruction.itype.rd] =
             ((Word)processor->R[instruction.itype.rs1] ^
             (Word)sign_extend_number(instruction.itype.imm, 12));
@@ -288,13 +288,13 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
 
             switch ((instruction.itype.imm >> 5) & (0x7F)) {
                 case 0x0:
-                    // srli - SHIFT RIGHT LOGICAL IMMEDIATE
+                    // srli - SHIFT RIGHT LOGICAL IMMEDIATE - shifts rs1 (unsigned) right logically by an amount unsigned immediate (constant) value (where imm is the first 5 bits of imm)
                     processor->R[instruction.itype.rd] =
                     ((Word)processor->R[instruction.itype.rs1] >>
                     ((Word)instruction.itype.imm & 0x1F));
                     break;
                 case 0x20:
-                    // srai - SHIFT RIGHT ARITHMETRIC IMMEDIATE
+                    // srai - SHIFT RIGHT ARITHMETRIC IMMEDIATE - shifts rs1 (signed) right logically by an amount signed immediate (constant) value
                     processor->R[instruction.itype.rd] =
                     ((sWord)processor->R[instruction.itype.rs1] >>
                     instruction.itype.imm);
@@ -324,6 +324,7 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
             handle_invalid_instruction(instruction);
             break;
     }
+    // Update PC
     processor->PC += 4;
 }
 
@@ -360,7 +361,7 @@ void execute_ecall(Processor *p, Byte *memory) {
 void execute_branch(Instruction instruction, Processor *processor) {
     switch (instruction.sbtype.funct3) {
         case 0x0:
-            // beq - BRANCH IF EQUALS
+            // beq - BRANCH IF EQUALS - if rs1 (signed) is equal to (signed) rs2, add the value of immediate to the PC, otherwise add 4 to PC
             if ((sWord)processor->R[instruction.sbtype.rs1] == (sWord)processor->R[instruction.sbtype.rs2]) {
                 processor->PC += get_branch_offset(instruction);
             } else {
@@ -370,7 +371,7 @@ void execute_branch(Instruction instruction, Processor *processor) {
             break;
 
         case 0x1:
-            // bne - BRANCH IF NOT EQUALS
+            // bne - BRANCH IF NOT EQUALS - if rs1 (signed) is not equal to (signed) rs2, add the value of immediate to the PC, otherwise add 4 to PC
             if ((sWord)processor->R[instruction.sbtype.rs1] != (sWord)processor->R[instruction.sbtype.rs2]) {
                 processor->PC += get_branch_offset(instruction);
             } else {
@@ -379,25 +380,25 @@ void execute_branch(Instruction instruction, Processor *processor) {
             break;
 
         case 0x4:
-            // blt - BRANCH IF LESS THAN
+            // blt - BRANCH IF LESS THAN - if rs1 (signed) is less than (signed) rs2, add the value of immediate to the PC, otherwise add 4 to PC
             ((sWord)processor->R[instruction.sbtype.rs1] < (sWord)processor->R[instruction.sbtype.rs2])? 
             (processor->PC += get_branch_offset(instruction)) : (processor->PC +=4);
             break;
 
         case 0x5:
-            // bge - BRANCH IF GREATER OR EQUAL
+            // bge - BRANCH IF GREATER OR EQUAL - if rs1 (signed) is greater or equal to (signed) rs2, add the value of immediate to the PC, otherwise add 4 to PC
             ((sWord)processor->R[instruction.sbtype.rs1] >= (sWord)processor->R[instruction.sbtype.rs2])? 
             (processor->PC += get_branch_offset(instruction)) : (processor->PC +=4);
             break;
 
         case 0x6:
-            // bltu - BRANCH IF LESS THAN UNSIGNED
+            // bltu - BRANCH IF LESS THAN UNSIGNED - if rs1 (unsigned) is less than (unsigned) rs2, add the value of immediate to the PC, otherwise add 4 to PC
             ((Word)processor->R[instruction.sbtype.rs1] < (Word)processor->R[instruction.sbtype.rs2])? 
             (processor->PC += get_branch_offset(instruction)) : (processor->PC +=4);
             break;
 
         case 0x7:
-            // bgeu - BRANCH IF GREATER OR EQUAL UNSIGNED
+            // bgeu - BRANCH IF GREATER OR EQUAL UNSIGNED - if rs1 (unsigned) is greater or equal to (unsigned) rs2, add the value of immediate to the PC, otherwise add 4 to PC
             ((Word)processor->R[instruction.sbtype.rs1] >= (Word)processor->R[instruction.sbtype.rs2])? 
             (processor->PC += get_branch_offset(instruction)) : (processor->PC +=4);
             break;
