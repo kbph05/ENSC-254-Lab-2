@@ -1,0 +1,16 @@
+,(ONLY MODIFY THIS COLUMN),,,,,,,
+LAB Group:,,,,,EXAMPLE:,LAB Group:,LA0X_0X,
+Student A Comp ID:,lll10,,,,,Student A Comp ID:,ksl24,
+Student B Comp ID:,kbh5,,,,,Student B Comp ID:,dst5,
+Test1: R-type instructions in code/input/Ri/Ri.input - 7 points,A,,,,,Test1: R-type instructions in code/input/Ri/Ri.input - 7 points,A,"`-> ksl24 was responsible for this, because ksl24 is Student A"
+Test1: I-type instructions in code/input/I/I.input - 13 points,A,,,,,Test1: I-type instructions in code/input/I/I.input - 13 points,B,"`-> dst5 was responsible for this, because dst5 is Student B"
+Test1: I-type instructions in code/input/I/L.input - 6 points,B,,,,,Test1: I-type instructions in code/input/I/L.input - 6 points,A,
+Test1: S-type instructions in code/input/S/S.input - 10 points,A,,,,,Test1: S-type instructions in code/input/S/S.input - 10 points,B,
+Test1: SB-type instructions in code/input/SB/SB.input - 10 points,A,,,,,Test1: SB-type instructions in code/input/SB/SB.input - 10 points,A,
+Test1: U-type instructions in code/input/U/U.input - 10 points,,,,,,Test1: U-type instructions in code/input/U/U.input - 10 points,B,
+Test1: UJ-type instructions in code/input/UJ/UJ.input - 9 points,,,,,,Test1: UJ-type instructions in code/input/UJ/UJ.input - 9 points,A,
+Test2: multiply testcase code/input/multiply.input - 15 points,,,,,,Test2: multiply testcase code/input/multiply.input – 15 points,AB,`-> Both ksl24 and dst5 were responsible for this (50/50)
+Test2: random testcase code/input/random.input - 15 points,B,,,,,Test2: random testcase code/input/random.input – 15 points,AB,`-> Both ksl24 and dst5 were responsible for this (50/50)
+Test3: blind test1 case code/input/blind_set1.input - 5 points,B,,,,,Test3: blind test1 case code/input/blind_set1.input – 5 points,B,
+Test3: blind test2 case code/input/blind_set2.input - 5 points,B,,,,,Test3: blind test2 case code/input/blind_set2.input – 5 points,B,
+Test3: blind test3 case code/input/blind_set3.input - 5 points,B,,,,,Test3: blind test3 case code/input/blind_set3.input – 5 points,A,
